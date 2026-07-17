@@ -1,6 +1,18 @@
 export const credentials = {
   realEstate: { licenseActive: false, licenseNumber: null as string | null, brokerageName: null as string | null, brokerageUrl: null as string | null, realtorTrademarkEligible: false },
-  homeInspection: { businessActive: false, internachiMemberActive: false, cpiActive: false, bilingualLogoEligible: false, insured: false, memberDirectoryUrl: null as string | null, certifications: [] as string[] },
+  homeInspection: {
+    businessActive: false,
+    internachiMemberActive: false,
+    cpiActive: false,
+    bilingualLogoEligible: false,
+    insured: false,
+    memberDirectoryUrl: null as string | null,
+    standardsOfPracticeUrl: null as string | null,
+    codeOfEthicsUrl: null as string | null,
+    sampleReportUrl: null as string | null,
+    certificationBadgeUrls: [] as Array<{ name: string; imageUrl: string; verificationUrl?: string }>,
+    certifications: [] as string[],
+  },
 };
 
 export function activeCredentials() {

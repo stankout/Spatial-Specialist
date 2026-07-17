@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArticleCard, FAQAccordion, PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
 import { LeadForm } from "@/components/lead-form";
 import { RealEstateHub } from "@/components/real-estate-hub";
+import { HomeInspectionHub } from "@/components/home-inspection-hub";
 import { complianceConfig } from "@/data/compliance.config";
 import type { Locale } from "@/data/site.config";
 import { contentForLocale } from "@/lib/content";
@@ -35,6 +36,7 @@ export async function generateMetadata({params}:{params:Promise<{locale:string;s
 
 export default async function ContentPage({params}:{params:Promise<{locale:string;slug:string[]}>}) {const {locale:raw,slug}=await params;if(!isLocale(raw))notFound();const locale:Locale=raw;const vi=locale==="vi";const key=slug.join("/");const root=slug[0];const child=slug[1];const guides=contentForLocale(locale);const guide=slug[0]==="guides"&&slug[1]?guides.find(g=>g.slug===slug[1]):null;if(guide)return <article className="article-page"><p className="eyebrow">{guide.categories[0]} · DEMO CONTENT</p><h1>{guide.title}</h1><p className="article-dek">{guide.description}</p><div className="article-meta">{guide.author} · {guide.publishedAt}</div><div className="article-body">{guide.body.map(p=><p key={p}>{p}</p>)}</div><div className="compliance-notice">{complianceConfig.notices[guide.serviceLine==="real-estate"?"realEstate":guide.serviceLine==="home-inspection"?"inspection":"spatial"]}</div><Link className="button button-dark" href={guide.cta.href}>{guide.cta.label}<ArrowRight/></Link></article>;
   if(key==="real-estate")return <RealEstateHub locale={locale}/>;
+  if(key==="home-inspection")return <HomeInspectionHub locale={locale}/>;
   const base=defs[key]||defs[root]; if(!base&&!serviceChildren[root]?.includes(child))notFound(); const englishTitle=child?titleCase(child):base.title;const title=vi?(viTitles[key]||viTitles[child]||englishTitle):englishTitle;const description=child?(vi?`Thông tin giáo dục về ${title.toLowerCase()}, được thiết kế để mở rộng bằng nội dung đã xác minh.`:`Educational guidance for ${title.toLowerCase()}, ready to expand with verified owner content.`):base.description;const isForm=base.kind==="form"||["buyers","sellers","request-inspection","book-consultation"].includes(child);
   return <><section className={`inner-hero ${root}`}><div><p className="eyebrow">{base.eyebrow}</p><h1>{title}</h1><p>{description}</p>{base.kind==="service"&&!child&&<Link className="button button-accent" href={`/${locale}/${root}/${root==="real-estate"?"buyers":root==="home-inspection"?"request-inspection":"book-consultation"}`}>{vi?"Bắt đầu":"Get started"}<ArrowRight/></Link>}</div>{key==="about"&&<PlaceholderPortrait/>}</section>
   {key==="services"&&<section className="section"><ServicePillarCards locale={locale}/></section>}

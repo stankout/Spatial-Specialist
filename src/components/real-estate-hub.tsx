@@ -89,7 +89,7 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
       </div>}
     </section>
 
-    <section className="deal-market-section">
+    <div className="deal-local-chapter"><section className="deal-market-section">
       <div className="market-title"><p className="eyebrow">Georgia market education</p><h2>{vi ? "Bối cảnh địa phương trước những con số gây chú ý." : "Local context before headline numbers."}</h2></div>
       <div className="market-editorial">
         <p>{vi ? "Hiểu thị trường bắt đầu từ loại hình nhà ở, nhịp sống địa phương và những yếu tố ảnh hưởng đến giá trị sử dụng lâu dài—không chỉ từ một con số nổi bật." : "Understanding a market begins with housing patterns, local life, and the factors that shape long-term usefulness—not a headline number alone."}</p>
@@ -105,7 +105,7 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
     <section className="deal-area-section">
       <div className="deal-section-heading"><p className="eyebrow">{vi ? "Khu vực phục vụ" : "Service areas"}</p><h2>{vi ? "Bắt đầu từ Metro Atlanta. Mở rộng có chủ đích." : "Start with Metro Atlanta. Expand with intention."}</h2></div>
       <div className="deal-area-list">{locations.map((location, index) => <Link href={`/${locale}/real-estate/areas/${location.slug}`} key={location.slug}><span>0{index + 1}</span><strong>{location[locale]}</strong><ArrowUpRight /></Link>)}</div>
-    </section>
+    </section></div>
 
     {visibleGuides.length > 0 && <section className="deal-resources-section">
       <div className="deal-section-heading"><p className="eyebrow">{vi ? "Cẩm nang & tài nguyên" : "Guides & resources"}</p><h2>{vi ? "Học trước khi cam kết." : "Learn before committing."}</h2></div>
