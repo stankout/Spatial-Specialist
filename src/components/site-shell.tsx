@@ -75,5 +75,5 @@ export function Footer({ locale }: { locale: Locale }) {
 
 export function StickyMobileCTA({ locale }: { locale: Locale }) {
   const book = <Link href={`/${locale}/book`}><CalendarDays /><span>{locale === "en" ? "Book" : "Đặt lịch"}</span></Link>;
-  return <div className="sticky-cta">{siteConfig.phone && <a href={`tel:${siteConfig.phone}`}><Phone /><span>Call</span></a>}{siteConfig.email && <a href={`mailto:${siteConfig.email}`}><Mail /><span>Message</span></a>}{book}</div>;
+  return <div className="sticky-cta">{siteConfig.phone && <a href={`tel:${siteConfig.phone}`}><Phone /><span>{locale === "en" ? "Call" : "Gọi"}</span></a>}<Link href={`/${locale}/contact`}><Mail /><span>{locale === "en" ? "Contact" : "Liên hệ"}</span></Link>{book}</div>;
 }

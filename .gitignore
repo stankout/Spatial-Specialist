@@ -11,6 +11,7 @@
 # Local deployment and build metadata
 /.vercel
 /.turbo
+/.dev-data/
 
 # Private keys and certificates
 *.pem

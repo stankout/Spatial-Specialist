@@ -45,7 +45,7 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
         <h1>{vi ? <>Quyết định bất động sản<br /><em>với nhiều bối cảnh hơn.</em></> : <>Real estate decisions<br /><em>with more context.</em></>}</h1>
         <div className="deal-hero-bottom">
           <p>{vi ? "Chiến lược dựa trên giáo dục cho người mua, người bán và nhà đầu tư—được xây dựng để hiểu thương vụ trước khi hành động." : "Education-led strategy for buyers, sellers, and investors—built to understand the deal before making the move."}</p>
-          <Link className="deal-primary-link" href={`/${locale}/real-estate#pathways`}>{vi ? "Lập kế hoạch cho bước tiếp theo" : "Plan your next move"}<ArrowRight /></Link>
+          <Link className="deal-primary-link" href={`/${locale}/book?service=real-estate`}>{vi ? "Lập kế hoạch cho bước tiếp theo" : "Plan your next move"}<ArrowRight /></Link>
         </div>
       </div>
       <div className="deal-hero-media" role="img" aria-label={vi ? "Đồ họa kiến trúc đại diện cho góc nhìn bất động sản" : "Architectural composition representing a property perspective"}>
@@ -124,7 +124,7 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
 
     <section className="deal-conversion">
       <div><p className="eyebrow">{vi ? "Bắt đầu với mục tiêu" : "Start with the decision"}</p><h2>{vi ? "Đang mua, bán hay đánh giá một cơ hội?" : "Buying, selling, or evaluating an opportunity?"}</h2></div>
-      <div><p>{vi ? "Chọn một lộ trình. Cuộc trao đổi bắt đầu từ bối cảnh của Anh/Chị, không phải một sales script." : "Choose one pathway. The conversation begins with your context, not a sales script."}</p><div className="deal-conversion-links"><Link href={`/${locale}/real-estate/buyers`}>{vi ? "Tôi đang mua" : "I’m buying"}<ArrowRight /></Link><Link href={`/${locale}/real-estate/sellers`}>{vi ? "Tôi đang bán" : "I’m selling"}<ArrowRight /></Link><Link href={`/${locale}/real-estate/investors`}>{vi ? "Tôi đang đầu tư" : "I’m investing"}<ArrowRight /></Link></div></div>
+      <div><p>{vi ? "Chọn một lộ trình. Cuộc trao đổi bắt đầu từ bối cảnh của Anh/Chị, không phải một sales script." : "Choose one pathway. The conversation begins with your context, not a sales script."}</p><div className="deal-conversion-links"><Link href={`/${locale}/book?service=buyer`}>{vi ? "Tôi đang mua" : "I’m buying"}<ArrowRight /></Link><Link href={`/${locale}/book?service=seller`}>{vi ? "Tôi đang bán" : "I’m selling"}<ArrowRight /></Link><Link href={`/${locale}/book?service=investor`}>{vi ? "Tôi đang đầu tư" : "I’m investing"}<ArrowRight /></Link></div></div>
     </section>
 
     <div className="deal-compliance"><p>{complianceConfig.notices.realEstate}</p></div>
