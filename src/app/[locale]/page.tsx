@@ -1,19 +1,26 @@
 import Link from "next/link";
+import Image from "next/image";
+import { connection } from "next/server";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { ArticleCard, PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
 import { activeCredentials } from "@/data/credentials.config";
 import { contentForLocale } from "@/lib/content";
 import { isLocale } from "@/lib/i18n";
+import { getAssignedMedia } from "@/lib/media/assignments";
+import { localizedValue } from "@/lib/media/types";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const vi = locale === "vi";
   const credentials = activeCredentials();
+  if (process.env.NODE_ENV === "development") await connection();
+  const [portrait, heroBackground] = await Promise.all([getAssignedMedia("homepage.heroPortrait"), getAssignedMedia("homepage.heroBackground")]);
 
   return <>
-    <section className="hero">
+    <section className={`hero ${heroBackground?`has-hero-background hero-background-${heroBackground.assignment.presentation.mode}`:""}`}>
+      {heroBackground&&<div className="hero-background-media" aria-hidden="true"><Image src={heroBackground.asset.url} alt="" fill priority sizes="100vw" unoptimized={heroBackground.asset.provider==="local"} style={{objectPosition:`${heroBackground.asset.focalPoint.x*100}% ${heroBackground.asset.focalPoint.y*100}%`}}/><span style={{opacity:heroBackground.assignment.presentation.overlayStrength}}/></div>}
       <div className="hero-copy">
         <div className="hero-identity">
           <p className="eyebrow">Anh Cao · Spatial Specialist LLC</p>
@@ -29,7 +36,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </div>
       </div>
       <div className="hero-visual">
-        <PlaceholderPortrait label={vi ? "Thay bằng ảnh chân dung chính thức" : "Replace with approved portrait"} />
+        {portrait?<div className="portrait-placeholder portrait-assigned"><Image src={portrait.asset.url} alt={localizedValue(portrait.asset.alt,locale)} fill priority sizes="(max-width: 1100px) 100vw, 32vw" unoptimized={portrait.asset.provider==="local"} style={{objectPosition:`${portrait.asset.focalPoint.x*100}% ${portrait.asset.focalPoint.y*100}%`}}/></div>:<PlaceholderPortrait label={vi ? "Thay bằng ảnh chân dung chính thức" : "Replace with approved portrait"} />}
         <div className="visual-note"><span>01—03</span><p>{vi ? "Giao dịch · Tình trạng · Không gian" : "Deal · Condition · Space"}</p></div>
       </div>
       <a href="#services" className="scroll-cue" aria-label="Scroll to services"><ArrowDown /></a>

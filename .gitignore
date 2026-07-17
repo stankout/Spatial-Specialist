@@ -12,6 +12,7 @@
 /.vercel
 /.turbo
 /.dev-data/
+/public/uploads/
 
 # Private keys and certificates
 *.pem
