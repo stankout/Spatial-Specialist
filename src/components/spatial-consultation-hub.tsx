@@ -3,6 +3,8 @@ import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { complianceConfig } from "@/data/compliance.config";
 import type { Locale } from "@/data/site.config";
 import { spatialConfig } from "@/data/spatial.config";
+import { PublishedContentStrip } from "@/components/public-content";
+import {ServiceClaritySection} from "@/components/strategy-sections";
 
 const pathwayContent = {
   residential: {
@@ -82,6 +84,8 @@ export function SpatialConsultationHub({ locale }: { locale: Locale }) {
     {approvedStudies.length > 0 && <section className="space-case-studies"><div className="space-heading"><p className="eyebrow">Case studies</p><h2>{vi ? "Phân tích tài sản đã được phê duyệt." : "Approved property analyses."}</h2></div>{approvedStudies.map((study) => <Link href={`/${locale}/spatial-consultation/case-studies/${study.slug}`} key={study.slug}><span>{study.projectType}</span><strong>{study.propertyType}</strong><ArrowUpRight /></Link>)}</section>}
 
     <section className="space-conversion"><div><p className="eyebrow">{vi ? "Bước tiếp theo" : "Next orientation"}</p><h2>{vi ? "Không gian nào cần được hiểu rõ hơn?" : "Which space needs a clearer reading?"}</h2><p>{vi ? "Chọn loại tư vấn trong một booking pathway duy nhất." : "Choose the consultation type through one focused booking pathway."}</p><Link className="space-primary-link" href={`/${locale}/book?service=spatial`}>{vi ? "Đặt lịch tư vấn không gian" : "Book a spatial consultation"}<ArrowRight /></Link></div><nav aria-label={vi ? "Dịch vụ liên quan" : "Related independent services"}><p>{vi ? "Các góc nhìn độc lập" : "Independent perspectives"}</p><Link href={`/${locale}/real-estate`}>01 · DEAL <span>{vi ? "Hỗ trợ mua bán bất động sản" : "Real estate guidance"}</span><ArrowUpRight /></Link><Link href={`/${locale}/home-inspection`}>02 · CONDITION <span>{vi ? "Hiểu tình trạng vật lý" : "Understand physical condition"}</span><ArrowUpRight /></Link></nav></section>
+    <ServiceClaritySection locale={locale} service="space" />
+    <PublishedContentStrip locale={locale} service="space" />
     <div className="space-compliance"><p>{complianceConfig.notices.spatial}</p></div>
   </div>;
 }

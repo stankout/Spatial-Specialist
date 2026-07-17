@@ -1,0 +1,6 @@
+import Link from "next/link";
+import {notFound} from "next/navigation";
+import {signatureOffers} from "@/data/strategy";
+import type {Locale} from "@/data/site.config";
+
+export function SignatureOfferPage({locale,slug}:{locale:Locale;slug:string}){const offer=signatureOffers.find(item=>item.slug===slug);if(!offer?.active)notFound();const vi=locale==="vi";return <main className="signature-offer-page"><header><p className="eyebrow">{vi?"Dịch vụ chuyên biệt":"Signature offer"}</p><h1>{slug.split("-").map(word=>word[0].toUpperCase()+word.slice(1)).join(" ")}</h1><p>{offer.positioning}</p></header><section><div><p className="eyebrow">{vi?"Dành cho ai":"Designed for"}</p><h2>{offer.audience}</h2><p>{vi?"Phạm vi cuối cùng được xác nhận sau cuộc trao đổi ban đầu; trang này không thay thế chuyên gia được cấp phép phù hợp.":"Final scope is confirmed after an initial conversation; this offer does not replace an appropriately licensed specialist."}</p></div><ol>{offer.components.map((component,index)=><li key={component}><span>0{index+1}</span>{component}</li>)}</ol></section><Link href={`/${locale}/book?service=${offer.bookingService}&source=${offer.slug}`}>{vi?"Trao đổi về phạm vi":"Discuss the scope"}</Link></main>}

@@ -6,6 +6,8 @@ import { activeCredentials } from "@/data/credentials.config";
 import { locations } from "@/data/locations.config";
 import type { Locale } from "@/data/site.config";
 import { contentForLocale } from "@/lib/content";
+import { PublishedContentStrip } from "@/components/public-content";
+import {ServiceClaritySection} from "@/components/strategy-sections";
 
 const pathways = [
   {
@@ -122,6 +124,8 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
       </div>
     </section>}
 
+    <ServiceClaritySection locale={locale} service="deal" />
+    <PublishedContentStrip locale={locale} service="deal" />
     <section className="deal-conversion">
       <div><p className="eyebrow">{vi ? "Bắt đầu với mục tiêu" : "Start with the decision"}</p><h2>{vi ? "Đang mua, bán hay đánh giá một cơ hội?" : "Buying, selling, or evaluating an opportunity?"}</h2></div>
       <div><p>{vi ? "Chọn một lộ trình. Cuộc trao đổi bắt đầu từ bối cảnh của Anh/Chị, không phải một sales script." : "Choose one pathway. The conversation begins with your context, not a sales script."}</p><div className="deal-conversion-links"><Link href={`/${locale}/book?service=buyer`}>{vi ? "Tôi đang mua" : "I’m buying"}<ArrowRight /></Link><Link href={`/${locale}/book?service=seller`}>{vi ? "Tôi đang bán" : "I’m selling"}<ArrowRight /></Link><Link href={`/${locale}/book?service=investor`}>{vi ? "Tôi đang đầu tư" : "I’m investing"}<ArrowRight /></Link></div></div>

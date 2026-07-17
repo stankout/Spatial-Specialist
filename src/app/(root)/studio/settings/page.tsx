@@ -1,0 +1,1 @@
+import {StudioNav} from "@/components/studio-nav";export default function Page(){return <main className="studio-page"><StudioNav active="settings"/><section className="studio-disabled"><p className="eyebrow">Settings</p><h1>Reserved for authenticated production configuration.</h1><p>STUDIO_ENABLED is a development switch, not authentication.</p></section></main>}

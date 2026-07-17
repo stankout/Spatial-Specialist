@@ -4,6 +4,8 @@ import { complianceConfig } from "@/data/compliance.config";
 import { credentials } from "@/data/credentials.config";
 import type { Locale } from "@/data/site.config";
 import { contentForLocale } from "@/lib/content";
+import { PublishedContentStrip } from "@/components/public-content";
+import {ServiceClaritySection} from "@/components/strategy-sections";
 
 const systems = ["roof", "electrical", "plumbing", "hvac", "foundation", "moisture", "attic", "crawlspace", "exterior", "drainage", "safety", "newConstruction"] as const;
 
@@ -116,6 +118,8 @@ export function HomeInspectionHub({ locale }: { locale: Locale }) {
     <section className="condition-faq"><div><p className="eyebrow">FAQ / CONDITION</p><h2>{vi ? "Câu hỏi rõ ràng trước khi đặt lịch." : "Clear questions before scheduling."}</h2></div><div>{faq[locale].map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section></div>
 
     <section className="condition-conversion"><div><p className="eyebrow">{vi ? "Bước tiếp theo" : "Next observation"}</p><h2>{vi ? "Cần kiểm tra tài sản hay hiểu một báo cáo?" : "Inspecting a property—or making sense of a report?"}</h2></div><div><p>{vi ? "Chọn lộ trình phù hợp với giai đoạn hiện tại. Mỗi dịch vụ độc lập với Real Estate và Spatial Consultation." : "Choose the pathway that fits this stage. Each service remains independent from Real Estate and Spatial Consultation."}</p><Link href={`/${locale}/book?service=inspection`}>{vi ? "Yêu cầu kiểm tra" : "Request an inspection"}<ArrowRight /></Link><Link href={`/${locale}/book?service=inspection-report-review`}>{vi ? "Review báo cáo" : "Review a report"}<ArrowRight /></Link></div></section>
+    <ServiceClaritySection locale={locale} service="condition" />
+    <PublishedContentStrip locale={locale} service="condition" />
     <div className="condition-compliance"><p>{complianceConfig.notices.inspection}</p></div>
   </div>;
 }

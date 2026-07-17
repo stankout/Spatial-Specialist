@@ -1,0 +1,18 @@
+"use client";
+import Link from "next/link";
+import {useMemo,useState} from "react";
+import type {ContentEntry} from "@/lib/content-studio/types";
+
+export function StrategyDraftList({initialEntries}:{initialEntries:ContentEntry[]}){
+ const [entries,setEntries]=useState(initialEntries),[pillar,setPillar]=useState(""),[audience,setAudience]=useState(""),[service,setService]=useState(""),[funnel,setFunnel]=useState(""),[objective,setObjective]=useState("");
+ const audiences=[...new Set(entries.map(item=>item.strategyMetadata?.targetAudience).filter(Boolean))];
+ const filtered=useMemo(()=>entries.filter(item=>(!pillar||item.strategyMetadata?.contentPillar===pillar)&&(!audience||item.strategyMetadata?.targetAudience===audience)&&(!service||item.serviceCategory===service)&&(!funnel||item.strategyMetadata?.funnelStage===funnel)&&(!objective||item.strategyMetadata?.strategicObjective===objective)),[entries,pillar,audience,service,funnel,objective]);
+ async function remove(item:ContentEntry){if(!confirm(`Delete draft “${item.localeContent.en?.title||item.slug}”?`))return;const response=await fetch(`/api/studio/content?id=${item.id}`,{method:"DELETE"});if(response.ok)setEntries(current=>current.filter(entry=>entry.id!==item.id))}
+ return <section className="strategy-library"><div className="strategy-filterbar">
+  <label>Content Pillar<select value={pillar} onChange={event=>setPillar(event.target.value)}><option value="">All</option>{[...new Set(entries.map(item=>item.strategyMetadata?.contentPillar).filter(Boolean))].map(value=><option key={value} value={value}>{value}</option>)}</select></label>
+  <label>Target Audience<select value={audience} onChange={event=>setAudience(event.target.value)}><option value="">All</option>{audiences.map(value=><option key={value} value={value}>{value}</option>)}</select></label>
+  <label>Service Lens<select value={service} onChange={event=>setService(event.target.value)}><option value="">All</option><option value="deal">DEAL</option><option value="condition">CONDITION</option><option value="space">SPACE</option><option value="general">GENERAL</option></select></label>
+  <label>Funnel Stage<select value={funnel} onChange={event=>setFunnel(event.target.value)}><option value="">All</option><option value="awareness">Awareness</option><option value="education">Education</option><option value="evaluation">Evaluation</option><option value="conversion">Conversion</option></select></label>
+  <label>Strategic Objective<select value={objective} onChange={event=>setObjective(event.target.value)}><option value="">All</option>{[...new Set(entries.map(item=>item.strategyMetadata?.strategicObjective).filter(Boolean))].map(value=><option key={value} value={value}>{value}</option>)}</select></label>
+ </div><p className="strategy-result-count">{filtered.length} strategic draft{filtered.length===1?"":"s"}</p><div className="strategy-draft-grid">{filtered.map(item=><article key={item.id}><span>{item.strategyMetadata?.contentPillar} · {item.serviceCategory}</span><h3>{item.localeContent.en?.title||item.localeContent.vi?.title}</h3><p>{item.strategyMetadata?.suggestedHook}</p><details><summary>Strategy brief</summary><dl><div><dt>Audience</dt><dd>{item.strategyMetadata?.targetAudience}</dd></div><div><dt>Objective</dt><dd>{item.strategyMetadata?.strategicObjective}</dd></div><div><dt>CTA</dt><dd>{item.strategyMetadata?.suggestedCta}</dd></div><div><dt>Proof required</dt><dd>{item.strategyMetadata?.suggestedProof}</dd></div></dl><p>{item.strategyMetadata?.strategicBrief}</p></details><div><Link href={`/studio/content?edit=${item.id}`}>Edit</Link>{item.status==="draft"&&<button type="button" onClick={()=>remove(item)}>Delete</button>}</div></article>)}</div></section>
+}

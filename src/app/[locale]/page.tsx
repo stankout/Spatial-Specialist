@@ -9,6 +9,8 @@ import { contentForLocale } from "@/lib/content";
 import { isLocale } from "@/lib/i18n";
 import { getAssignedMedia } from "@/lib/media/assignments";
 import { localizedValue } from "@/lib/media/types";
+import { HomepageFeaturedContent } from "@/components/public-content";
+import {BrandClaritySection} from "@/components/strategy-sections";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -50,6 +52,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <ServicePillarCards locale={locale} />
     </section>
 
+    <HomepageFeaturedContent locale={locale} />
+    <BrandClaritySection locale={locale}/>
     <div className="home-editorial-chapter">
       <section className="perspective-section"><div className="perspective-intro"><p className="eyebrow">The Anh Cao Perspective</p><h2>{vi ? "Tài sản không chỉ là một địa chỉ." : "A property is more than an address."}</h2></div><div className="perspective-list">{[["Deal", vi ? "Giá trị giao dịch" : "The financial and transactional side."], ["Condition", vi ? "Những gì tài sản đang thể hiện về mặt vật lý" : "What the property is physically telling you."], ["Space", vi ? "Cách môi trường vận hành cho người sống bên trong" : "How the environment functions for the people inside it."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
       <section className="section guides-section"><div className="section-heading row"><div><p className="eyebrow">{vi ? "Cẩm nang mới" : "Latest guides"}</p><h2>{vi ? "Học trước khi quyết định." : "Clarity before commitment."}</h2></div><Link className="quiet-link" href={`/${locale}/guides`}>{vi ? "Xem tất cả" : "View all guides"}<ArrowRight /></Link></div><div className="article-grid">{contentForLocale(locale).map((item) => <ArticleCard key={item.slug} item={item} locale={locale} />)}</div></section>
