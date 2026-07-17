@@ -57,6 +57,13 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
 
     {credentials.length > 0 && <div className="deal-credentials">{credentials.map((credential) => <span key={credential}>{credential}</span>)}</div>}
 
+    <nav className="deal-editorial-nav" aria-label={vi ? "Bàn nội dung bất động sản" : "Real estate editorial desk"}>
+      <span>{vi ? "Bàn biên tập" : "Editorial desk"}</span>
+      <a href="#pathways">{vi ? "Lộ trình" : "Pathways"}<small>Buyer · Seller · Investor</small></a>
+      <a href="#property-media">{vi ? "Tài sản & video" : "Property & video"}<small>Tour · Perspective · Education</small></a>
+      <a href="#market-context">{vi ? "Bối cảnh Georgia" : "Georgia context"}<small>Market · Place · Service area</small></a>
+    </nav>
+
     <section className="deal-intro">
       <div><p className="eyebrow">{vi ? "Chọn lộ trình" : "Choose your pathway"}</p><h2>{vi ? "Ba mục tiêu. Một tiêu chuẩn rõ ràng hơn." : "Three goals. One clearer standard."}</h2></div>
       <p>{vi ? "Real Estate là góc nhìn DEAL trong hệ thống Anh Cao. Dịch vụ này độc lập với Home Inspection và Spatial Consultation; khách hàng chọn đúng hỗ trợ cần thiết cho quyết định của mình." : "Real Estate is the DEAL lens in the Anh Cao system. It stands independently from Home Inspection and Spatial Consultation, so clients can choose only the support their decision needs."}</p>
@@ -74,7 +81,7 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
       })}
     </section>
 
-    <section className="deal-media-section">
+    <section className="deal-media-section" id="property-media">
       <div className="deal-section-heading"><p className="eyebrow">Property media</p><h2>{vi ? "Xem tài sản. Sau đó hiểu sâu hơn." : "See the property. Then go deeper."}</h2><p>{vi ? "Property tours, góc nhìn thị trường và video giáo dục giúp đặt mỗi quyết định vào đúng bối cảnh." : "Property tours, market perspective, and educational video place each decision in its wider context."}</p></div>
       {featuredMedia ? <div className="deal-featured-media deal-featured-media-ready">
         <Link className="featured-video-placeholder" href={featuredMedia.videoUrl || `/${locale}/guides/${featuredMedia.slug}`} target={featuredMedia.videoUrl ? "_blank" : undefined}>
@@ -85,11 +92,12 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
         <div className="media-queue">{approvedGuides.slice(0, 3).map((guide, index) => <Link href={`/${locale}/guides/${guide.slug}`} key={guide.slug}><span>0{index + 1}</span><strong>{guide.title}</strong></Link>)}</div>
       </div> : <div className="deal-media-empty" role="img" aria-label={vi ? "Đồ họa biên tập cho nội dung bất động sản" : "Editorial graphic for real estate media"}>
         <span>DEAL / MEDIA</span><strong>{vi ? "Góc nhìn địa phương, trình bày rõ ràng." : "Local perspective, clearly framed."}</strong>
+        <div className="deal-media-index" aria-hidden="true"><i>Property</i><i>Market</i><i>Education</i></div>
         {isDevelopment && <small>Editorial media preview</small>}
       </div>}
     </section>
 
-    <div className="deal-local-chapter"><section className="deal-market-section">
+    <div className="deal-local-chapter" id="market-context"><section className="deal-market-section">
       <div className="market-title"><p className="eyebrow">Georgia market education</p><h2>{vi ? "Bối cảnh địa phương trước những con số gây chú ý." : "Local context before headline numbers."}</h2></div>
       <div className="market-editorial">
         <p>{vi ? "Hiểu thị trường bắt đầu từ loại hình nhà ở, nhịp sống địa phương và những yếu tố ảnh hưởng đến giá trị sử dụng lâu dài—không chỉ từ một con số nổi bật." : "Understanding a market begins with housing patterns, local life, and the factors that shape long-term usefulness—not a headline number alone."}</p>

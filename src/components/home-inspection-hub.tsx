@@ -76,7 +76,11 @@ export function HomeInspectionHub({ locale }: { locale: Locale }) {
 
     <section className="condition-systems">
       <div className="condition-heading condition-heading-row"><div><p className="eyebrow">{vi ? "Kiến trúc kiểm tra" : "What we inspect"}</p><h2>{vi ? "Một tài sản, nhiều hệ thống liên quan." : "One property, connected systems."}</h2></div><p>{vi ? "Các nhóm dưới đây tổ chức nội dung quan sát và giáo dục. Chúng không đại diện cho phát hiện tại một tài sản cụ thể." : "These categories organize observation and education. They do not represent findings at a specific property."}</p></div>
-      <div className="condition-system-grid">{systems.map((system, index) => <Link href={`/${locale}/home-inspection/defect-library#${system}`} key={system}><span>{String(index + 1).padStart(2, "0")}</span><strong>{systemLabels[locale][system]}</strong><ArrowUpRight /></Link>)}</div>
+      <div className="condition-observation-legend" aria-label={vi ? "Quy trình ghi nhận" : "Observation workflow"}><span>{vi ? "Quan sát" : "Visible"}</span><span>{vi ? "Tiếp cận" : "Accessible"}</span><span>{vi ? "Ghi nhận" : "Documented"}</span></div>
+      <div className="condition-system-grid">{systems.map((system, index) => <details data-system={system} key={system}>
+        <summary><span>{String(index + 1).padStart(2, "0")}</span><strong>{systemLabels[locale][system]}</strong><b aria-hidden="true">+</b></summary>
+        <div><p>{vi ? `Phạm vi quan sát cho ${systemLabels[locale][system].toLowerCase()} được xác định theo khu vực có thể tiếp cận tại thời điểm kiểm tra.` : `Observation of ${systemLabels[locale][system].toLowerCase()} is scoped to areas accessible at the time of inspection.`}</p><Link href={`/${locale}/home-inspection/defect-library#${system}`}>{vi ? "Mở chỉ mục kỹ thuật" : "Open technical index"}<ArrowUpRight /></Link></div>
+      </details>)}</div>
     </section>
 
     <section className="condition-services">
