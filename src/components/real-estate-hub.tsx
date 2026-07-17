@@ -1,12 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { complianceConfig } from "@/data/compliance.config";
 import { activeCredentials } from "@/data/credentials.config";
 import { locations } from "@/data/locations.config";
 import type { Locale } from "@/data/site.config";
-import { contentForLocale } from "@/lib/content";
-import { PublishedContentStrip } from "@/components/public-content";
+import { contentPath, PublishedContentStrip } from "@/components/public-content";
+import { publicContent } from "@/lib/content-studio/repository";
 import {ServiceClaritySection} from "@/components/strategy-sections";
 
 const pathways = [
@@ -30,13 +29,12 @@ const pathways = [
   },
 ] as const;
 
-export function RealEstateHub({ locale }: { locale: Locale }) {
+export async function RealEstateHub({ locale }: { locale: Locale }) {
   const vi = locale === "vi";
-  const guides = contentForLocale(locale).filter((item) => item.serviceLine === "real-estate");
+  const entries = await publicContent({locale,serviceCategory:"deal"});
+  const guides = entries.filter((item) => item.type === "guide");
   const isDevelopment = process.env.NODE_ENV === "development";
-  const approvedGuides = guides.filter((item) => !item.demo);
-  const featuredMedia = approvedGuides.find((item) => item.featuredImage || item.videoUrl);
-  const visibleGuides = isDevelopment ? guides : approvedGuides;
+  const featuredMedia = entries.find((item) => item.type === "video" || item.featured);
   const credentials = activeCredentials();
 
   return <div className="deal-hub">
@@ -86,12 +84,11 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
     <section className="deal-media-section" id="property-media">
       <div className="deal-section-heading"><p className="eyebrow">Property media</p><h2>{vi ? "Xem tài sản. Sau đó hiểu sâu hơn." : "See the property. Then go deeper."}</h2><p>{vi ? "Property tours, góc nhìn thị trường và video giáo dục giúp đặt mỗi quyết định vào đúng bối cảnh." : "Property tours, market perspective, and educational video place each decision in its wider context."}</p></div>
       {featuredMedia ? <div className="deal-featured-media deal-featured-media-ready">
-        <Link className="featured-video-placeholder" href={featuredMedia.videoUrl || `/${locale}/guides/${featuredMedia.slug}`} target={featuredMedia.videoUrl ? "_blank" : undefined}>
-          {featuredMedia.featuredImage && <Image src={featuredMedia.featuredImage} alt="" fill sizes="(max-width: 1000px) 100vw, 75vw" />}
+        <Link className="featured-video-placeholder" href={contentPath(featuredMedia,locale)}>
           <span className="featured-play" aria-hidden="true"><Play /></span>
-          <div><span>Featured / Media</span><strong>{featuredMedia.title}</strong></div>
+          <div><span>Featured / Media</span><strong>{featuredMedia.localeContent[locale]!.title}</strong></div>
         </Link>
-        <div className="media-queue">{approvedGuides.slice(0, 3).map((guide, index) => <Link href={`/${locale}/guides/${guide.slug}`} key={guide.slug}><span>0{index + 1}</span><strong>{guide.title}</strong></Link>)}</div>
+        <div className="media-queue">{entries.filter(item=>item.id!==featuredMedia.id).slice(0,3).map((item,index)=><Link href={contentPath(item,locale)} key={item.id}><span>0{index+1}</span><strong>{item.localeContent[locale]!.title}</strong></Link>)}</div>
       </div> : <div className="deal-media-empty" role="img" aria-label={vi ? "Đồ họa biên tập cho nội dung bất động sản" : "Editorial graphic for real estate media"}>
         <span>DEAL / MEDIA</span><strong>{vi ? "Góc nhìn địa phương, trình bày rõ ràng." : "Local perspective, clearly framed."}</strong>
         <div className="deal-media-index" aria-hidden="true"><i>Property</i><i>Market</i><i>Education</i></div>
@@ -117,10 +114,10 @@ export function RealEstateHub({ locale }: { locale: Locale }) {
       <div className="deal-area-list">{locations.map((location, index) => <Link href={`/${locale}/real-estate/areas/${location.slug}`} key={location.slug}><span>0{index + 1}</span><strong>{location[locale]}</strong><ArrowUpRight /></Link>)}</div>
     </section></div>
 
-    {visibleGuides.length > 0 && <section className="deal-resources-section">
+    {guides.length > 0 && <section className="deal-resources-section">
       <div className="deal-section-heading"><p className="eyebrow">{vi ? "Cẩm nang & tài nguyên" : "Guides & resources"}</p><h2>{vi ? "Học trước khi cam kết." : "Learn before committing."}</h2></div>
       <div className="deal-resource-list">
-        {visibleGuides.map((guide, index) => <Link href={`/${locale}/guides/${guide.slug}`} key={guide.slug}><span>0{index + 1}</span><div><small>{guide.categories[0]}{isDevelopment && guide.demo ? " · Preview" : ""}</small><h3>{guide.title}</h3><p>{guide.description}</p></div><ArrowUpRight /></Link>)}
+        {guides.map((guide,index)=><Link href={contentPath(guide,locale)} key={guide.id}><span>0{index+1}</span><div><small>{guide.tags[0]||"Guide"}</small><h3>{guide.localeContent[locale]!.title}</h3><p>{guide.localeContent[locale]!.excerpt}</p></div><ArrowUpRight /></Link>)}
       </div>
     </section>}
 

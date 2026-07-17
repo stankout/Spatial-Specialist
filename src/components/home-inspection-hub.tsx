@@ -3,8 +3,8 @@ import { ArrowRight, ArrowUpRight, FileSearch, Play } from "lucide-react";
 import { complianceConfig } from "@/data/compliance.config";
 import { credentials } from "@/data/credentials.config";
 import type { Locale } from "@/data/site.config";
-import { contentForLocale } from "@/lib/content";
-import { PublishedContentStrip } from "@/components/public-content";
+import { contentPath, PublishedContentStrip } from "@/components/public-content";
+import { publicContent } from "@/lib/content-studio/repository";
 import {ServiceClaritySection} from "@/components/strategy-sections";
 
 const systems = ["roof", "electrical", "plumbing", "hvac", "foundation", "moisture", "attic", "crawlspace", "exterior", "drainage", "safety", "newConstruction"] as const;
@@ -44,10 +44,10 @@ const faq = {
   ],
 };
 
-export function HomeInspectionHub({ locale }: { locale: Locale }) {
+export async function HomeInspectionHub({ locale }: { locale: Locale }) {
   const vi = locale === "vi";
   const inspection = credentials.homeInspection;
-  const guides = contentForLocale(locale).filter((item) => item.serviceLine === "home-inspection" && !item.demo);
+  const education = (await publicContent({locale,serviceCategory:"condition"})).filter(item=>item.type==="guide"||item.type==="video"||item.type==="inspection-education");
   const credentialItems = [
     inspection.internachiMemberActive && inspection.memberDirectoryUrl ? { label: "InterNACHI member profile", href: inspection.memberDirectoryUrl } : null,
     inspection.cpiActive ? { label: "CPI®", href: inspection.memberDirectoryUrl } : null,
@@ -105,7 +105,7 @@ export function HomeInspectionHub({ locale }: { locale: Locale }) {
 
     <section className="condition-media">
       <div className="condition-heading"><p className="eyebrow">{vi ? "Giáo dục & video" : "Inspection education & video"}</p><h2>{vi ? "Nhìn kỹ hơn. Hiểu rõ hơn." : "Look closer. Understand more."}</h2></div>
-      {guides.length > 0 ? <div className="condition-media-list">{guides.map((guide) => <Link href={`/${locale}/guides/${guide.slug}`} key={guide.slug}><Play /><span>{guide.categories[0]}</span><strong>{guide.title}</strong></Link>)}</div> : <div className="condition-media-abstract" role="img" aria-label={vi ? "Đồ họa kỹ thuật cho nội dung giáo dục kiểm tra nhà" : "Technical graphic for inspection education"}><span>FIELD NOTES / CONDITION</span><div aria-hidden="true"><i /><i /><i /><i /></div><strong>{vi ? "Quan sát có cấu trúc. Giải thích bình tĩnh." : "Structured observation. Calm explanation."}</strong></div>}
+      {education.length > 0 ? <div className="condition-media-list">{education.map((item) => <Link href={contentPath(item,locale)} key={item.id}><Play /><span>{item.tags[0]||item.type}</span><strong>{item.localeContent[locale]!.title}</strong></Link>)}</div> : <div className="condition-media-abstract" role="img" aria-label={vi ? "Đồ họa kỹ thuật cho nội dung giáo dục kiểm tra nhà" : "Technical graphic for inspection education"}><span>FIELD NOTES / CONDITION</span><div aria-hidden="true"><i /><i /><i /><i /></div><strong>{vi ? "Quan sát có cấu trúc. Giải thích bình tĩnh." : "Structured observation. Calm explanation."}</strong></div>}
     </section>
 
     <div className="condition-closing-chapter"><section className="condition-standards">

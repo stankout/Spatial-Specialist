@@ -3,13 +3,12 @@ import Image from "next/image";
 import { connection } from "next/server";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
-import { ArticleCard, PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
+import { PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
 import { activeCredentials } from "@/data/credentials.config";
-import { contentForLocale } from "@/lib/content";
 import { isLocale } from "@/lib/i18n";
 import { getAssignedMedia } from "@/lib/media/assignments";
 import { localizedValue } from "@/lib/media/types";
-import { HomepageFeaturedContent } from "@/components/public-content";
+import { HomepageFeaturedContent, HomepageLatestGuides } from "@/components/public-content";
 import {BrandClaritySection} from "@/components/strategy-sections";
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -56,7 +55,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <BrandClaritySection locale={locale}/>
     <div className="home-editorial-chapter">
       <section className="perspective-section"><div className="perspective-intro"><p className="eyebrow">The Anh Cao Perspective</p><h2>{vi ? "Tài sản không chỉ là một địa chỉ." : "A property is more than an address."}</h2></div><div className="perspective-list">{[["Deal", vi ? "Giá trị giao dịch" : "The financial and transactional side."], ["Condition", vi ? "Những gì tài sản đang thể hiện về mặt vật lý" : "What the property is physically telling you."], ["Space", vi ? "Cách môi trường vận hành cho người sống bên trong" : "How the environment functions for the people inside it."]].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
-      <section className="section guides-section"><div className="section-heading row"><div><p className="eyebrow">{vi ? "Cẩm nang mới" : "Latest guides"}</p><h2>{vi ? "Học trước khi quyết định." : "Clarity before commitment."}</h2></div><Link className="quiet-link" href={`/${locale}/guides`}>{vi ? "Xem tất cả" : "View all guides"}<ArrowRight /></Link></div><div className="article-grid">{contentForLocale(locale).map((item) => <ArticleCard key={item.slug} item={item} locale={locale} />)}</div></section>
+      <HomepageLatestGuides locale={locale} />
     </div>
     {credentials.length > 0 && <section className="credential-bar">{credentials.map((credential) => <span key={credential}>{credential}</span>)}</section>}
     <section className="final-cta"><p className="eyebrow">{vi ? "Bắt đầu từ mục tiêu của Anh/Chị" : "Start with your goal"}</p><h2>{vi ? "Anh/Chị đang nhìn tài sản từ góc nào?" : "Which perspective do you need today?"}</h2><div className="cta-links"><Link href={`/${locale}/book?service=buyer`}>{vi ? "Tôi muốn mua nhà" : "I want to buy"}</Link><Link href={`/${locale}/book?service=seller`}>{vi ? "Tôi muốn bán nhà" : "I want to sell"}</Link><Link href={`/${locale}/book?service=inspection`}>{vi ? "Tôi cần kiểm tra nhà" : "I need an inspection"}</Link><Link href={`/${locale}/book?service=spatial`}>{vi ? "Tôi muốn tư vấn không gian" : "I want a spatial consultation"}</Link></div></section>

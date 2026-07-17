@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/data/site.config";
-import type { ContentItem } from "@/lib/content";
 
 const serviceData = {
   "real-estate": {
@@ -48,20 +47,6 @@ export function ServicePillarCards({ locale }: { locale: Locale }) {
         </Link>
       ))}
     </div>
-  );
-}
-
-export function ArticleCard({ item, locale }: { item: ContentItem; locale: Locale }) {
-  return (
-    <Link className="article-card" href={`/${locale}/guides/${item.slug}`}>
-      <span>{item.categories[0]} · {item.demo ? "DEMO" : ""}</span>
-      <h3>{item.title}</h3>
-      <p>{item.description}</p>
-      <span className="text-link">
-        {locale === "en" ? "Read guide" : "Đọc cẩm nang"}
-        <ArrowUpRight />
-      </span>
-    </Link>
   );
 }
 

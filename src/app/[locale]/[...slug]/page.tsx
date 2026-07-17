@@ -2,14 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import { notFound } from "next/navigation";
-import { ArticleCard, FAQAccordion, PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
+import { FAQAccordion, PlaceholderPortrait, ServicePillarCards } from "@/components/cards";
 import { ExternalBookingLink, LeadCapture, LeadForm } from "@/components/lead-form";
 import { RealEstateHub } from "@/components/real-estate-hub";
 import { HomeInspectionHub } from "@/components/home-inspection-hub";
 import { SpatialConsultationHub } from "@/components/spatial-consultation-hub";
 import { complianceConfig } from "@/data/compliance.config";
 import type { Locale } from "@/data/site.config";
-import { contentForLocale } from "@/lib/content";
 import { isLocale } from "@/lib/i18n";
 import { getBookingProvider } from "@/lib/booking-provider";
 
@@ -36,7 +35,7 @@ const viTitles:Record<string,string>={about:"Về Anh Cao","about-spatial-specia
 
 export async function generateMetadata({params}:{params:Promise<{locale:string;slug:string[]}>}):Promise<Metadata>{const {locale,slug}=await params;const key=slug.join("/");const def=defs[key]||defs[slug[0]];return {title:def?.title||titleCase(slug.at(-1)||"Page"),description:def?.description,alternates:{canonical:`/${locale}/${key}`,languages:{en:`/en/${key}`,vi:`/vi/${key}`}}}}
 
-export default async function ContentPage({params,searchParams}:{params:Promise<{locale:string;slug:string[]}>;searchParams:Promise<Record<string,string|string[]|undefined>>}) {const [{locale:raw,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(raw))notFound();const locale:Locale=raw;const vi=locale==="vi";const key=slug.join("/");const root=slug[0];const child=slug[1];const guides=contentForLocale(locale);const guide=slug[0]==="guides"&&slug[1]?guides.find(g=>g.slug===slug[1]):null;if(guide)return <article className="article-page"><p className="eyebrow">{guide.categories[0]} · DEMO CONTENT</p><h1>{guide.title}</h1><p className="article-dek">{guide.description}</p><div className="article-meta">{guide.author} · {guide.publishedAt}</div><div className="article-body">{guide.body.map(p=><p key={p}>{p}</p>)}</div><div className="compliance-notice">{complianceConfig.notices[guide.serviceLine==="real-estate"?"realEstate":guide.serviceLine==="home-inspection"?"inspection":"spatial"]}</div><Link className="button button-dark" href={guide.cta.href}>{guide.cta.label}<ArrowRight/></Link></article>;
+export default async function ContentPage({params,searchParams}:{params:Promise<{locale:string;slug:string[]}>;searchParams:Promise<Record<string,string|string[]|undefined>>}) {const [{locale:raw,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(raw))notFound();const locale:Locale=raw;const vi=locale==="vi";const key=slug.join("/");const root=slug[0];const child=slug[1];
   if(key==="real-estate")return <RealEstateHub locale={locale}/>;
   if(key==="home-inspection")return <HomeInspectionHub locale={locale}/>;
   if(key==="spatial-consultation")return <SpatialConsultationHub locale={locale}/>;
@@ -46,7 +45,6 @@ export default async function ContentPage({params,searchParams}:{params:Promise<
   {key==="services"&&<section className="section"><ServicePillarCards locale={locale}/></section>}
   {key==="about-spatial-specialist"&&<Framework locale={locale}/>} {key==="about"&&<About locale={locale}/>} 
   {base.kind==="service"&&!child&&<ServiceOverview locale={locale} root={root}/>} 
-  {base.kind==="list"&&key==="guides"&&<section className="section"><div className="article-grid">{guides.map(g=><ArticleCard key={g.slug} item={g} locale={locale}/>)}</div></section>}
   {base.kind==="list"&&key==="videos"&&<EmptyMedia locale={locale}/>} {key==="reviews"&&<EmptyMedia locale={locale} reviews/>}
   {isForm&&<section className="form-section"><div><p className="eyebrow">{vi?"Bước tiếp theo":"Next step"}</p><h2>{vi?"Chia sẻ mục tiêu, không cần gửi dữ liệu nhạy cảm.":"Share the goal, not sensitive data."}</h2><p>{vi?"Biểu mẫu đang dùng adapter mock để website build được mà chưa cần dịch vụ trả phí.":"The form uses a mock adapter until a launch provider is connected."}</p></div><LeadForm locale={locale} type={root==="real-estate"?(child==="sellers"?"seller":"buyer"):root==="home-inspection"?"inspection":root==="spatial-consultation"?"spatial-residential":"general"}/></section>}
   {child&&!isForm&&<GenericDetail locale={locale} root={root}/>} {base.kind==="legal"&&<LegalBody locale={locale} page={key}/>} {key==="book"&&<BookingSelector locale={locale}/>} {key==="contact"&&null}
