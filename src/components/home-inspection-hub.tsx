@@ -57,7 +57,7 @@ export async function HomeInspectionHub({ locale }: { locale: Locale }) {
   ].filter(Boolean) as Array<{ label: string; href?: string | null }>;
 
   return <div className="condition-hub">
-    <section className="condition-hero">
+    <section data-visual-section="hero" data-tone="glass" className="condition-hero story-surface-glass story-text-dark">
       <div className="condition-hero-copy">
         <div className="condition-index"><span>02 / 03</span><strong>CONDITION</strong></div>
         <p className="eyebrow">Anh Cao · Home Inspection · Georgia</p>
@@ -71,12 +71,12 @@ export async function HomeInspectionHub({ locale }: { locale: Locale }) {
       <div className="condition-continuum" aria-label="Deal, Condition, Space"><span>Deal</span><strong>Condition</strong><span>Space</span></div>
     </section>
 
-    <section className="condition-process">
+    <section data-visual-section="process" data-tone="glass" className="condition-process story-surface-glass story-text-dark">
       <div className="condition-heading"><p className="eyebrow">{vi ? "Quy trình kiểm tra" : "Inspection process"}</p><h2>{vi ? "Quan sát trước. Diễn giải trong giới hạn." : "Observe first. Interpret within limits."}</h2></div>
       <div className="condition-process-grid">{process[locale].map(([title, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
     </section>
 
-    <section className="condition-systems">
+    <section data-visual-section="systems" data-tone="dark" className="condition-systems story-surface-dark story-text-light">
       <div className="condition-heading condition-heading-row"><div><p className="eyebrow">{vi ? "Kiến trúc kiểm tra" : "What we inspect"}</p><h2>{vi ? "Một tài sản, nhiều hệ thống liên quan." : "One property, connected systems."}</h2></div><p>{vi ? "Các nhóm dưới đây tổ chức nội dung quan sát và giáo dục. Chúng không đại diện cho phát hiện tại một tài sản cụ thể." : "These categories organize observation and education. They do not represent findings at a specific property."}</p></div>
       <div className="condition-observation-legend" aria-label={vi ? "Quy trình ghi nhận" : "Observation workflow"}><span>{vi ? "Quan sát" : "Visible"}</span><span>{vi ? "Tiếp cận" : "Accessible"}</span><span>{vi ? "Ghi nhận" : "Documented"}</span></div>
       <div className="condition-system-grid">{systems.map((system, index) => <details data-system={system} key={system}>
@@ -85,7 +85,7 @@ export async function HomeInspectionHub({ locale }: { locale: Locale }) {
       </details>)}</div>
     </section>
 
-    <section className="condition-services">
+    <section data-tone="glass" className="condition-services story-surface-glass story-text-dark">
       <div className="condition-heading"><p className="eyebrow">{vi ? "Lộ trình dịch vụ" : "Service pathways"}</p><h2>{vi ? "Đúng mức hỗ trợ cho đúng câu hỏi." : "The right depth for the question."}</h2></div>
       <div className="condition-service-list">
         <Link href={`/${locale}/home-inspection/request-inspection`}><span>01</span><div><small>{vi ? "Trước quyết định" : "Before the decision"}</small><h3>{vi ? "Yêu cầu kiểm tra tài sản" : "Property inspection request"}</h3><p>{vi ? "Xác định tài sản, thời điểm, phạm vi và quyền tiếp cận trước khi xác nhận dịch vụ." : "Clarify the property, timing, scope, and access before confirming service."}</p></div><ArrowRight /></Link>
@@ -93,22 +93,22 @@ export async function HomeInspectionHub({ locale }: { locale: Locale }) {
       </div>
     </section>
 
-    <div className="condition-evidence-chapter"><section className="condition-report">
+    <div data-visual-section="report" className="condition-evidence-chapter"><section className="condition-report">
       <div className="condition-report-visual" aria-hidden="true"><div><span>SECTION 04</span><i /><i /><i /><i /></div><FileSearch /></div>
       <div><p className="eyebrow">{vi ? "Báo cáo mẫu" : "Sample report"}</p><h2>{vi ? "Một báo cáo tốt tạo ra thứ tự, không tạo hoảng sợ." : "A useful report creates order, not alarm."}</h2><p>{vi ? "Cấu trúc báo cáo tách mô tả quan sát, vị trí, giới hạn, mức ưu tiên và đề xuất theo dõi." : "Report structure separates the observation, location, limitation, priority, and recommended follow-up."}</p>{inspection.sampleReportUrl ? <a className="condition-primary-link" href={inspection.sampleReportUrl} target="_blank" rel="noreferrer">{vi ? "Mở báo cáo mẫu" : "View sample report"}<ArrowUpRight /></a> : <Link className="condition-primary-link" href={`/${locale}/home-inspection/sample-report`}>{vi ? "Tìm hiểu cấu trúc báo cáo" : "Explore report structure"}<ArrowRight /></Link>}</div>
     </section>
 
-    <section className="condition-library">
+    <section data-visual-section="defect-library" className="condition-library">
       <div><p className="eyebrow">Defect library / Education</p><h2>{vi ? "Nhận diện mẫu hình. Không chẩn đoán từ xa." : "Recognize patterns. Do not diagnose remotely."}</h2></div>
       <div><p>{vi ? "Thư viện được tổ chức theo hệ thống và loại quan sát. Nội dung giáo dục giúp đặt câu hỏi tốt hơn; kết luận cho tài sản cụ thể cần kiểm tra tại chỗ và chuyên gia phù hợp." : "The library is organized by system and observation type. Education helps form better questions; property-specific conclusions require on-site evaluation and the appropriate specialist."}</p><Link className="condition-secondary-link" href={`/${locale}/home-inspection/defect-library`}>{vi ? "Mở Defect Library" : "Enter the Defect Library"}<ArrowRight /></Link></div>
     </section></div>
 
-    <section className="condition-media">
+    <section data-tone="clear" className="condition-media story-surface-transparent story-text-light">
       <div className="condition-heading"><p className="eyebrow">{vi ? "Giáo dục & video" : "Inspection education & video"}</p><h2>{vi ? "Nhìn kỹ hơn. Hiểu rõ hơn." : "Look closer. Understand more."}</h2></div>
       {education.length > 0 ? <div className="condition-media-list">{education.map((item) => <Link href={contentPath(item,locale)} key={item.id}><Play /><span>{item.tags[0]||item.type}</span><strong>{item.localeContent[locale]!.title}</strong></Link>)}</div> : <div className="condition-media-abstract" role="img" aria-label={vi ? "Đồ họa kỹ thuật cho nội dung giáo dục kiểm tra nhà" : "Technical graphic for inspection education"}><span>FIELD NOTES / CONDITION</span><div aria-hidden="true"><i /><i /><i /><i /></div><strong>{vi ? "Quan sát có cấu trúc. Giải thích bình tĩnh." : "Structured observation. Calm explanation."}</strong></div>}
     </section>
 
-    <div className="condition-closing-chapter"><section className="condition-standards">
+    <div data-visual-section="standards" className="condition-closing-chapter"><section className="condition-standards">
       <div><p className="eyebrow">{vi ? "Tiêu chuẩn & đạo đức" : "Standards & ethics"}</p><h2>{vi ? "Phạm vi rõ ràng tạo nên niềm tin." : "Clear boundaries create trust."}</h2></div>
       <div className="condition-standard-list"><details><summary><span>01</span><h3>{vi ? "Phạm vi quan sát" : "Observation scope"}</h3><b aria-hidden="true">+</b></summary><div><p>{vi ? "Kiểm tra là quan sát trực quan, không xâm lấn trong phạm vi đã thống nhất và khu vực có thể tiếp cận." : "Inspection is a visual, non-invasive observation within the agreed scope and accessible areas."}</p>{inspection.standardsOfPracticeUrl && <a href={inspection.standardsOfPracticeUrl} target="_blank" rel="noreferrer">{vi ? "Đọc Standards of Practice" : "Read Standards of Practice"}<ArrowUpRight /></a>}</div></details><details><summary><span>02</span><h3>{vi ? "Độc lập & giới hạn" : "Independence & limits"}</h3><b aria-hidden="true">+</b></summary><div><p>{vi ? "Báo cáo cần phân biệt điều quan sát được, điều không thể tiếp cận và khi nào cần specialist." : "Reporting should distinguish what was observed, what was inaccessible, and when a specialist is appropriate."}</p>{inspection.codeOfEthicsUrl && <a href={inspection.codeOfEthicsUrl} target="_blank" rel="noreferrer">{vi ? "Đọc Code of Ethics" : "Read Code of Ethics"}<ArrowUpRight /></a>}</div></details></div>
     </section>

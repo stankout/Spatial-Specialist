@@ -38,7 +38,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
   const credentials = activeCredentials();
 
   return <div className="deal-hub">
-    <section className="deal-hero">
+    <section data-visual-section="hero" data-tone="glass" className="deal-hero story-surface-glass story-text-dark">
       <div className="deal-hero-copy">
         <div className="deal-index"><span>01 / 03</span><strong>DEAL</strong></div>
         <p className="eyebrow">Anh Cao · Real Estate · Georgia</p>
@@ -64,12 +64,12 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
       <a href="#market-context">{vi ? "Bối cảnh Georgia" : "Georgia context"}<small>Market · Place · Service area</small></a>
     </nav>
 
-    <section className="deal-intro">
+    <section data-tone="glass" className="deal-intro story-surface-glass story-text-dark">
       <div><p className="eyebrow">{vi ? "Chọn lộ trình" : "Choose your pathway"}</p><h2>{vi ? "Ba mục tiêu. Một tiêu chuẩn rõ ràng hơn." : "Three goals. One clearer standard."}</h2></div>
       <p>{vi ? "Real Estate là góc nhìn DEAL trong hệ thống Anh Cao. Dịch vụ này độc lập với Home Inspection và Spatial Consultation; khách hàng chọn đúng hỗ trợ cần thiết cho quyết định của mình." : "Real Estate is the DEAL lens in the Anh Cao system. It stands independently from Home Inspection and Spatial Consultation, so clients can choose only the support their decision needs."}</p>
     </section>
 
-    <section className="deal-pathways" id="pathways" aria-label={vi ? "Lộ trình bất động sản" : "Real estate pathways"}>
+    <section data-visual-section="pathways" className="deal-pathways" id="pathways" aria-label={vi ? "Lộ trình bất động sản" : "Real estate pathways"}>
       {pathways.map((pathway) => {
         const content = pathway[locale];
         return <Link href={`/${locale}/real-estate/${pathway.key}`} className="deal-pathway" key={pathway.key}>
@@ -81,7 +81,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
       })}
     </section>
 
-    <section className="deal-media-section" id="property-media">
+    <section data-visual-section="property-media" data-tone="clear" className="deal-media-section story-surface-transparent story-text-light" id="property-media">
       <div className="deal-section-heading"><p className="eyebrow">Property media</p><h2>{vi ? "Xem tài sản. Sau đó hiểu sâu hơn." : "See the property. Then go deeper."}</h2><p>{vi ? "Property tours, góc nhìn thị trường và video giáo dục giúp đặt mỗi quyết định vào đúng bối cảnh." : "Property tours, market perspective, and educational video place each decision in its wider context."}</p></div>
       {featuredMedia ? <div className="deal-featured-media deal-featured-media-ready">
         <Link className="featured-video-placeholder" href={contentPath(featuredMedia,locale)}>
@@ -96,7 +96,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
       </div>}
     </section>
 
-    <div className="deal-local-chapter" id="market-context"><section className="deal-market-section">
+    <div data-visual-section="market-context" className="deal-local-chapter" id="market-context"><section className="deal-market-section">
       <div className="market-title"><p className="eyebrow">Georgia market education</p><h2>{vi ? "Bối cảnh địa phương trước những con số gây chú ý." : "Local context before headline numbers."}</h2></div>
       <div className="market-editorial">
         <p>{vi ? "Hiểu thị trường bắt đầu từ loại hình nhà ở, nhịp sống địa phương và những yếu tố ảnh hưởng đến giá trị sử dụng lâu dài—không chỉ từ một con số nổi bật." : "Understanding a market begins with housing patterns, local life, and the factors that shape long-term usefulness—not a headline number alone."}</p>
@@ -109,12 +109,12 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
       </div>
     </section>
 
-    <section className="deal-area-section">
+    <section data-visual-section="service-area" data-tone="glass" className="deal-area-section story-surface-glass story-text-dark">
       <div className="deal-section-heading"><p className="eyebrow">{vi ? "Khu vực phục vụ" : "Service areas"}</p><h2>{vi ? "Bắt đầu từ Metro Atlanta. Mở rộng có chủ đích." : "Start with Metro Atlanta. Expand with intention."}</h2></div>
       <div className="deal-area-list">{locations.map((location, index) => <Link href={`/${locale}/real-estate/areas/${location.slug}`} key={location.slug}><span>0{index + 1}</span><strong>{location[locale]}</strong><ArrowUpRight /></Link>)}</div>
     </section></div>
 
-    {guides.length > 0 && <section className="deal-resources-section">
+    {guides.length > 0 && <section data-visual-section="resources" className="deal-resources-section">
       <div className="deal-section-heading"><p className="eyebrow">{vi ? "Cẩm nang & tài nguyên" : "Guides & resources"}</p><h2>{vi ? "Học trước khi cam kết." : "Learn before committing."}</h2></div>
       <div className="deal-resource-list">
         {guides.map((guide,index)=><Link href={contentPath(guide,locale)} key={guide.id}><span>0{index+1}</span><div><small>{guide.tags[0]||"Guide"}</small><h3>{guide.localeContent[locale]!.title}</h3><p>{guide.localeContent[locale]!.excerpt}</p></div><ArrowUpRight /></Link>)}
@@ -123,7 +123,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
 
     <ServiceClaritySection locale={locale} service="deal" />
     <PublishedContentStrip locale={locale} service="deal" />
-    <section className="deal-conversion">
+    <section data-visual-section="cta" data-tone="dark" className="deal-conversion story-surface-dark story-text-light">
       <div><p className="eyebrow">{vi ? "Bắt đầu với mục tiêu" : "Start with the decision"}</p><h2>{vi ? "Đang mua, bán hay đánh giá một cơ hội?" : "Buying, selling, or evaluating an opportunity?"}</h2></div>
       <div><p>{vi ? "Chọn một lộ trình. Cuộc trao đổi bắt đầu từ bối cảnh của Anh/Chị, không phải một sales script." : "Choose one pathway. The conversation begins with your context, not a sales script."}</p><div className="deal-conversion-links"><Link href={`/${locale}/book?service=buyer`}>{vi ? "Tôi đang mua" : "I’m buying"}<ArrowRight /></Link><Link href={`/${locale}/book?service=seller`}>{vi ? "Tôi đang bán" : "I’m selling"}<ArrowRight /></Link><Link href={`/${locale}/book?service=investor`}>{vi ? "Tôi đang đầu tư" : "I’m investing"}<ArrowRight /></Link></div></div>
     </section>

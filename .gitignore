@@ -13,6 +13,7 @@
 /.turbo
 /.dev-data/
 /public/uploads/
+/docs/generated/
 
 # Private keys and certificates
 *.pem
@@ -27,3 +28,5 @@ Thumbs.db
 Desktop.ini
 /.vscode
 /.idea
+
+.codex-audit/

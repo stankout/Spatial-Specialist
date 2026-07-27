@@ -11,6 +11,9 @@ import { complianceConfig } from "@/data/compliance.config";
 import type { Locale } from "@/data/site.config";
 import { isLocale } from "@/lib/i18n";
 import { getBookingProvider } from "@/lib/booking-provider";
+import {getAssignedMedia,getDraftAssignedMedia} from "@/lib/media/assignments";
+import type {MediaSlotKey} from "@/lib/media/types";
+import {VisualPage} from "@/components/visual-page";
 
 type PageDef={title:string;eyebrow:string;description:string;kind?:"service"|"form"|"legal"|"list"};
 const defs:Record<string,PageDef>={
@@ -36,10 +39,11 @@ const viTitles:Record<string,string>={about:"Về Anh Cao","about-spatial-specia
 export async function generateMetadata({params}:{params:Promise<{locale:string;slug:string[]}>}):Promise<Metadata>{const {locale,slug}=await params;const key=slug.join("/");const def=defs[key]||defs[slug[0]];return {title:def?.title||titleCase(slug.at(-1)||"Page"),description:def?.description,alternates:{canonical:`/${locale}/${key}`,languages:{en:`/en/${key}`,vi:`/vi/${key}`}}}}
 
 export default async function ContentPage({params,searchParams}:{params:Promise<{locale:string;slug:string[]}>;searchParams:Promise<Record<string,string|string[]|undefined>>}) {const [{locale:raw,slug},query]=await Promise.all([params,searchParams]);if(!isLocale(raw))notFound();const locale:Locale=raw;const vi=locale==="vi";const key=slug.join("/");const root=slug[0];const child=slug[1];
-  if(key==="real-estate")return <RealEstateHub locale={locale}/>;
-  if(key==="home-inspection")return <HomeInspectionHub locale={locale}/>;
-  if(key==="spatial-consultation")return <SpatialConsultationHub locale={locale}/>;
-  if(key==="book"||key==="contact")return <ConversionPage locale={locale} contact={key==="contact"} initialService={typeof query.service==="string"?query.service:null}/>;
+  const visualPreview=query.visualPreview==="1";
+  if(key==="real-estate")return <VisualPage page="deal" locale={locale} preview={visualPreview}><RealEstateHub locale={locale}/></VisualPage>;
+  if(key==="home-inspection")return <VisualPage page="condition" locale={locale} preview={visualPreview}><HomeInspectionHub locale={locale}/></VisualPage>;
+  if(key==="spatial-consultation"){const slots=["spatial.heroPortrait","spatial.heroImage","spatial.compassPortrait","spatial.compassDiagram","spatial.orientationVisual","spatial.educationMedia","spatial.sectionBackground","spatial.featuredVideo"] as MediaSlotKey[];const publicMedia=Object.fromEntries(await Promise.all(slots.map(async slot=>[slot,(await getAssignedMedia(slot))?.asset||null])));const draftPreview=query.mediaPreview==="1"&&process.env.NODE_ENV!=="production";const drafts=draftPreview?Object.fromEntries(await Promise.all(slots.map(async slot=>[slot,(await getDraftAssignedMedia(slot))?.asset||null]))):{};return <VisualPage page="space" locale={locale} preview={visualPreview}><SpatialConsultationHub locale={locale} media={{...publicMedia,...Object.fromEntries(Object.entries(drafts).filter(([,asset])=>asset))}} draftPreview={draftPreview}/></VisualPage>}
+  if(key==="book"||key==="contact")return <VisualPage page={key==="contact"?"contact":"booking"} locale={locale} preview={visualPreview}><ConversionPage locale={locale} contact={key==="contact"} initialService={typeof query.service==="string"?query.service:null}/></VisualPage>;
   const base=defs[key]||defs[root]; if(!base&&!serviceChildren[root]?.includes(child))notFound(); const englishTitle=child?titleCase(child):base.title;const title=vi?(viTitles[key]||viTitles[child]||englishTitle):englishTitle;const description=child?(vi?`Thông tin giáo dục về ${title.toLowerCase()}, được thiết kế để mở rộng bằng nội dung đã xác minh.`:`Educational guidance for ${title.toLowerCase()}, ready to expand with verified owner content.`):base.description;const isForm=base.kind==="form"||["buyers","sellers","request-inspection","book-consultation"].includes(child);
   return <><section className={`inner-hero ${root}`}><div><p className="eyebrow">{base.eyebrow}</p><h1>{title}</h1><p>{description}</p>{base.kind==="service"&&!child&&<Link className="button button-accent" href={`/${locale}/${root}/${root==="real-estate"?"buyers":root==="home-inspection"?"request-inspection":"book-consultation"}`}>{vi?"Bắt đầu":"Get started"}<ArrowRight/></Link>}</div>{key==="about"&&<PlaceholderPortrait/>}</section>
   {key==="services"&&<section className="section"><ServicePillarCards locale={locale}/></section>}

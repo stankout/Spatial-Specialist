@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Mail, Menu, Phone, X } from "lucide-react";
-import { useState } from "react";
+import { Building2, CalendarDays, Mail, MapPin, Menu, Phone, UserRound, X } from "lucide-react";
+import { useState, type CSSProperties } from "react";
 import { siteConfig, type Locale } from "@/data/site.config";
 import { getDictionary } from "@/lib/i18n";
+import {visualCssVariables,type VisualSettings} from "@/lib/visuals/config";
 
 export function Header({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
@@ -69,8 +70,33 @@ function ArrowMark() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function Footer({ locale }: { locale: Locale }) {
-  return <footer><div className="footer-grid"><div><p className="eyebrow">Spatial Specialist LLC</p><h2>One property.<br />Three perspectives.</h2></div><div><h3>{locale === "en" ? "Explore" : "Khám phá"}</h3><Link href={`/${locale}/real-estate`}>Real Estate</Link><Link href={`/${locale}/home-inspection`}>Home Inspection</Link><Link href={`/${locale}/spatial-consultation`}>Spatial Consultation</Link></div><div><h3>{locale === "en" ? "Company" : "Doanh nghiệp"}</h3><Link href={`/${locale}/about-spatial-specialist`}>Spatial Specialist LLC</Link><Link href={`/${locale}/privacy`}>Privacy</Link><Link href={`/${locale}/terms`}>Terms</Link><Link href={`/${locale}/accessibility`}>Accessibility</Link></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Spatial Specialist LLC</span><span>English · Tiếng Việt · Georgia</span></div></footer>;
+export function Footer({ locale,visuals }: { locale: Locale;visuals?:VisualSettings }) {
+  const vi=locale==="vi";
+  const secondaryLinks=[
+    [vi?"Giới thiệu":"About","/about"],
+    [vi?"Video":"Videos","/videos"],
+    [vi?"Cẩm nang":"Guides","/guides"],
+    [vi?"Liên hệ":"Contact","/contact"],
+    [vi?"Quyền riêng tư":"Privacy","/privacy"],
+    [vi?"Điều khoản":"Terms","/terms"],
+    [vi?"Trợ năng":"Accessibility","/accessibility"],
+  ] as const;
+  return <footer className="cyber-footer" data-tone="dark" data-footer-surface={visuals?.footer.surface} data-footer-alignment={visuals?.footer.alignment} data-footer-type={visuals?.footer.typeStyle} data-visual-accent={visuals?.footer.accent} style={visuals?visualCssVariables(visuals) as CSSProperties:undefined}>
+    <div className="footer-signal-rail"><span>AC / SPATIAL SPECIALIST</span><span>{vi?"HỆ THỐNG LIÊN HỆ":"CONTACT SYSTEM"} · 03—03</span></div>
+    <div className="footer-terminal-heading"><p className="eyebrow">{vi?"Kênh liên hệ trực tiếp":"Direct contact channels"}</p><h2>{vi?"Kết nối đúng góc nhìn.":"Connect with the right perspective."}</h2></div>
+    <div className="footer-contact-grid">
+      <section aria-labelledby="footer-real-estate">
+        <div className="footer-contact-index"><span>01</span><Building2 aria-hidden="true" /></div>
+        <div><p className="footer-contact-label" id="footer-real-estate">{vi?"Bất động sản":"Real estate"}</p><h3>{siteConfig.principalName}</h3><p>{siteConfig.realEstateAffiliation}</p>{siteConfig.phone&&<a href={`tel:${siteConfig.phone}`}><Phone aria-hidden="true" />{siteConfig.phoneDisplay}</a>}</div>
+      </section>
+      <section aria-labelledby="footer-spatial">
+        <div className="footer-contact-index"><span>02</span><UserRound aria-hidden="true" /></div>
+        <div><p className="footer-contact-label" id="footer-spatial">AC Spatial Specialist</p><h3>{siteConfig.businessName}</h3>{siteConfig.email&&<a href={`mailto:${siteConfig.email}`}><Mail aria-hidden="true" />{siteConfig.email}</a>}<p className="footer-location"><MapPin aria-hidden="true" />{siteConfig.locationLabel}</p></div>
+      </section>
+    </div>
+    <nav className="footer-nav" aria-label={vi?"Liên kết cuối trang":"Footer navigation"}>{secondaryLinks.map(([label,href])=><Link key={href} href={`/${locale}${href}`}>{label}</Link>)}</nav>
+    <div className="footer-bottom"><span>© {new Date().getFullYear()} {siteConfig.businessName}</span><span>DEAL · CONDITION · SPACE / {siteConfig.locationLabel}</span></div>
+  </footer>;
 }
 
 export function StickyMobileCTA({ locale }: { locale: Locale }) {

@@ -2,12 +2,12 @@ import {NextResponse} from "next/server";
 import {z} from "zod";
 import {listAssignments,removeAssignment} from "@/lib/media/assignments";
 import {LocalMediaStorageProvider} from "@/lib/media/storage";
-import {focalPointSchema,localizedTextSchema} from "@/lib/media/types";
+import {focalPointSchema,localizedTextSchema,mediaRightsStatusSchema,mediaRoleSchema,serviceLensSchema} from "@/lib/media/types";
 import {getStudioAccess} from "@/lib/media/security";
 import {contentReferences} from "@/lib/content-studio/repository";
 export const runtime="nodejs";
 const provider=new LocalMediaStorageProvider();
-const metadataUpdate=z.object({id:z.string(),title:localizedTextSchema.optional(),alt:localizedTextSchema.optional(),caption:localizedTextSchema.optional(),focalPoint:focalPointSchema.optional()});
+const metadataUpdate=z.object({id:z.string(),title:localizedTextSchema.optional(),description:localizedTextSchema.optional(),alt:localizedTextSchema.optional(),caption:localizedTextSchema.optional(),focalPoint:focalPointSchema.optional(),cropMode:z.enum(["cover","contain","natural"]).optional(),mediaRole:mediaRoleSchema.optional(),serviceLens:serviceLensSchema.optional(),tags:z.string().array().optional(),reviewStatus:z.enum(["ready","review","private"]).optional(),possiblePrivateInformation:z.boolean().optional(),privacyReviewed:z.boolean().optional(),rightsStatus:mediaRightsStatusSchema.optional(),approvedForPublicUse:z.boolean().optional()});
 function denied(){return NextResponse.json({ok:false,error:getStudioAccess().reason},{status:403})}
 export async function GET(){if(!getStudioAccess().enabled)return denied();const [assets,assignments]=await Promise.all([provider.list(),listAssignments()]);return NextResponse.json({ok:true,assets:assets.map(asset=>({...asset,usedBy:assignments.filter(item=>item.assetId===asset.id).map(item=>item.slot)}))})}
 export async function POST(request:Request){if(!getStudioAccess().writable)return denied();try{const form=await request.formData();const file=form.get("file");if(!(file instanceof File))return NextResponse.json({ok:false,error:"Choose an image to upload."},{status:400});const asset=await provider.upload({buffer:Buffer.from(await file.arrayBuffer()),filename:file.name,mimeType:file.type});return NextResponse.json({ok:true,asset},{status:201})}catch(error){return NextResponse.json({ok:false,error:error instanceof Error?error.message:"Upload failed."},{status:400})}}
