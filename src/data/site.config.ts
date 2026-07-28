@@ -28,6 +28,14 @@ export type ServiceConfig = {
   title: string;
   titleVi: string;
   leadTypes: readonly string[];
+  publicEnabled:boolean;
+  navigationEnabled:boolean;
+  bookingEnabled:boolean;
+  contentEnabled:boolean;
+  credentialRequirements:readonly string[];
+  requiredCredential:string|null;
+  credentialVerified:boolean;
+  ownerApproved:boolean;
 };
 
 export type ServiceRegistry = Record<ServiceKey, ServiceConfig>;
@@ -46,6 +54,7 @@ export const serviceRegistry: ServiceRegistry = {
     title: "Real Estate",
     titleVi: "Bất động sản",
     leadTypes: ["buyer", "seller", "investor"],
+    publicEnabled:true,navigationEnabled:true,bookingEnabled:true,contentEnabled:true,credentialRequirements:[],requiredCredential:null,credentialVerified:true,ownerApproved:true,
   },
   condition: {
     key: "condition",
@@ -56,6 +65,7 @@ export const serviceRegistry: ServiceRegistry = {
     title: "Home Inspection",
     titleVi: "Kiểm tra nhà",
     leadTypes: ["inspection", "inspection-report-review"],
+    publicEnabled:false,navigationEnabled:false,bookingEnabled:false,contentEnabled:false,credentialRequirements:["Verified eligibility and owner approval are required before public activation."],requiredCredential:"home-inspection-public-eligibility",credentialVerified:false,ownerApproved:false,
   },
   space: {
     key: "space",
@@ -66,11 +76,12 @@ export const serviceRegistry: ServiceRegistry = {
     title: "Spatial Consultation",
     titleVi: "Tư vấn không gian",
     leadTypes: ["spatial-residential", "spatial-property-selection", "spatial-business", "spatial-audit"],
+    publicEnabled:true,navigationEnabled:true,bookingEnabled:true,contentEnabled:true,credentialRequirements:[],requiredCredential:null,credentialVerified:true,ownerApproved:true,
   },
 };
 
 export function isPublicService(service: ServiceConfig) {
-  return service.status === "active";
+  return service.status === "active"&&service.publicEnabled&&service.navigationEnabled&&service.ownerApproved&&(!service.requiredCredential||service.credentialVerified);
 }
 
 export function getPublicServices(registry: ServiceRegistry = serviceRegistry) {

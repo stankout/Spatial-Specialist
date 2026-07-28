@@ -23,17 +23,22 @@ export const platformConfig = {
     vi: "Một số liên kết có thể là liên kết tiếp thị. AC có thể nhận hoa hồng mà không làm tăng chi phí của bạn.",
   },
   providers: {
+    database: process.env.DATABASE_URL ? "configured" : "disabled",
     storage: process.env.MEDIA_STORAGE_PROVIDER === "local" ? "mock" : process.env.MEDIA_STORAGE_PROVIDER ? "configured" : "disabled",
     payments: process.env.PAYMENT_PROVIDER === "mock" ? "mock" : process.env.PAYMENT_PROVIDER ? "configured" : "disabled",
     scheduling: process.env.SCHEDULING_PROVIDER === "manual" ? "mock" : process.env.SCHEDULING_PROVIDER ? "configured" : "disabled",
     email: process.env.RESEND_API_KEY ? "configured" : "disabled",
     analytics: process.env.NEXT_PUBLIC_GA_ID ? "configured" : "mock",
-    authentication: process.env.AUTH_PROVIDER ? "configured" : "disabled",
+    // A provider name alone does not make authentication production-ready.
+    authentication: "disabled",
     printOnDemand: process.env.POD_PROVIDER === "mock" ? "mock" : process.env.POD_PROVIDER ? "configured" : "disabled",
+    digitalDelivery: process.env.DIGITAL_DELIVERY_PROVIDER ? "configured" : "disabled",
+    socialPublishing: process.env.SOCIAL_PUBLISHING_PROVIDER ? "configured" : "disabled",
+    backups: process.env.BACKUP_PROVIDER ? "configured" : "disabled",
+    audit: process.env.AUDIT_PROVIDER && process.env.AUDIT_PROVIDER !== "local" ? "configured" : "mock",
   } satisfies Record<string, ProviderState>,
 } as const;
 
 export function isFeatureEnabled(feature: FeatureFlag) {
   return featureFlags[feature];
 }
-

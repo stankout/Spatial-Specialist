@@ -55,10 +55,12 @@ describe("centralized public service gating",()=>{
 
   it("keeps CONDITION in Studio configuration and makes activation reversible",()=>{
     expect(Object.keys(serviceRegistry)).toEqual(["deal","condition","space"]);
-    const activated:ServiceRegistry={
+    const activatedWithoutCredential:ServiceRegistry={
       ...serviceRegistry,
-      condition:{...serviceRegistry.condition,status:"active"},
+      condition:{...serviceRegistry.condition,status:"active",publicEnabled:true,navigationEnabled:true,bookingEnabled:true,contentEnabled:true,ownerApproved:true},
     };
+    expect(getPublicServices(activatedWithoutCredential).map(service=>service.key)).toEqual(["deal","space"]);
+    const activated:ServiceRegistry={...activatedWithoutCredential,condition:{...activatedWithoutCredential.condition,credentialVerified:true}};
     expect(getPublicServices(activated).map(service=>service.key)).toEqual(["deal","condition","space"]);
     expect(isPublicServicePath("/en/home-inspection",activated)).toBe(true);
     expect(isPublicLeadType("inspection",activated)).toBe(true);

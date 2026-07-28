@@ -8,6 +8,8 @@ import { getPublicServices, siteConfig, type Locale } from "@/data/site.config";
 import { getDictionary } from "@/lib/i18n";
 import {visualCssVariables,type VisualSettings} from "@/lib/visuals/config";
 import {getPublicNavigation} from "@/lib/navigation";
+import { SocialLinks } from "@/components/social-links";
+import type { SocialChannel } from "@/lib/social/types";
 
 type PublicAvailability={catalog:boolean;portfolio:boolean};
 export function Header({ locale,availability={catalog:false,portfolio:false} }: { locale: Locale;availability?:PublicAvailability }) {
@@ -66,7 +68,7 @@ function ArrowMark() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function Footer({ locale,visuals,availability={catalog:false,portfolio:false} }: { locale: Locale;visuals?:VisualSettings;availability?:PublicAvailability }) {
+export function Footer({ locale,visuals,availability={catalog:false,portfolio:false},socialChannels=[] }: { locale: Locale;visuals?:VisualSettings;availability?:PublicAvailability;socialChannels?:SocialChannel[] }) {
   const vi=locale==="vi";
   const publicServiceLenses=getPublicServices().map(service=>service.lens).join(" · ");
   const secondaryLinks=[
@@ -88,6 +90,7 @@ export function Footer({ locale,visuals,availability={catalog:false,portfolio:fa
         <div><p className="footer-contact-label" id="footer-spatial">AC Spatial Specialist</p><h3>{siteConfig.businessName}</h3>{siteConfig.email&&<a href={`mailto:${siteConfig.email}`}><Mail aria-hidden="true" />{siteConfig.email}</a>}<p className="footer-location"><MapPin aria-hidden="true" />{siteConfig.locationLabel}</p></div>
       </section>
     </div>
+    <section className="footer-social-system" aria-labelledby="footer-social-title"><div><p className="eyebrow">{vi?"Kênh chính thức":"Official channels"}</p><h3 id="footer-social-title">{vi?"Theo dõi AC Spatial Specialist":"Follow AC Spatial Specialist"}</h3></div><SocialLinks channels={socialChannels} locale={locale} variant="footer"/></section>
     <nav className="footer-nav" aria-label={vi?"Liên kết cuối trang":"Footer navigation"}>{secondaryLinks.map(([label,href])=><Link key={href} href={`/${locale}${href}`}>{label}</Link>)}</nav>
     <div className="footer-bottom"><span>© {new Date().getFullYear()} {siteConfig.businessName}</span><span>{publicServiceLenses} / {siteConfig.locationLabel}</span></div>
   </footer>;
