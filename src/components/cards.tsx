@@ -1,44 +1,36 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { Locale } from "@/data/site.config";
+import { getPublicServices, type Locale, type ServiceKey } from "@/data/site.config";
 
-const serviceData = {
-  "real-estate": {
-    number: "01",
-    lens: "Deal",
-    title: "Real Estate",
+const serviceCopy: Record<ServiceKey, { en: string; vi: string }> = {
+  deal: {
     en: "Strategy for buyers, sellers, and investors—built around education and local context.",
     vi: "Chiến lược cho người mua, người bán và nhà đầu tư—dựa trên giáo dục và bối cảnh địa phương.",
   },
-  "home-inspection": {
-    number: "02",
-    lens: "Condition",
-    title: "Home Inspection",
+  condition: {
     en: "Calm, technical property education to help you understand what the house is telling you.",
     vi: "Giáo dục kỹ thuật, bình tĩnh để hiểu ngôi nhà đang cho bạn biết điều gì.",
   },
-  "spatial-consultation": {
-    number: "03",
-    lens: "Space",
-    title: "Spatial & Feng Shui",
+  space: {
     en: "Practical space analysis with an optional traditional interpretive layer.",
     vi: "Phân tích không gian thực tế với lớp diễn giải truyền thống khi phù hợp.",
   },
-} as const;
+};
 
 export function ServicePillarCards({ locale }: { locale: Locale }) {
+  const services = getPublicServices();
   return (
-    <div className="service-grid">
-      {Object.entries(serviceData).map(([slug, service]) => (
-        <Link className={`service-card ${slug}`} href={`/${locale}/${slug}`} key={slug}>
+    <div className="service-grid" data-service-count={services.length}>
+      {services.map((service) => (
+        <Link className={`service-card ${service.slug}`} href={`/${locale}/${service.slug}`} key={service.key}>
           <div className="service-top">
-            <span>{service.number}</span>
+            <span>{locale === "vi" ? "GÓC NHÌN" : "PERSPECTIVE"}</span>
             <span className="service-lens">{service.lens}</span>
           </div>
           <div className="service-rule" aria-hidden="true" />
           <div className="service-body">
-            <h3>{service.title}</h3>
-            <p>{service[locale]}</p>
+            <h3>{locale === "vi" ? service.titleVi : service.title}</h3>
+            <p>{serviceCopy[service.key][locale]}</p>
             <span className="text-link">
               {locale === "en" ? "Explore this perspective" : "Khám phá góc nhìn này"}
               <ArrowUpRight />

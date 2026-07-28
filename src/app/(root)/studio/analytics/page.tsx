@@ -1,0 +1,4 @@
+import { StudioPlatformPage } from "@/components/studio-platform";
+import { platformConfig } from "@/data/platform.config";
+const events = ["page_view", "service_cta", "lead_submit", "booking_request", "product_view", "add_to_cart", "checkout_start", "checkout_complete", "affiliate_click", "video_play"];
+export default function Page() { return <StudioPlatformPage active="analytics" eyebrow="Event architecture" title="Analytics" description="A provider-neutral event vocabulary is ready. No visitor surveillance or invented metrics are shown."><section className="analytics-event-grid"><header><strong>Provider</strong><span>{platformConfig.providers.analytics}</span></header>{events.map((event) => <article key={event}><code>{event}</code><span>Registered</span></article>)}</section></StudioPlatformPage>; }

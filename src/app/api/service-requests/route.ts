@@ -1,0 +1,8 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { featureFlags } from "@/data/platform.config";
+import { memoryRateLimit } from "@/lib/rate-limit";
+import { LocalServiceRequestRepository } from "@/lib/service-requests/repository";
+import { serviceRequestSchema } from "@/lib/service-requests/types";
+const inputSchema = serviceRequestSchema.omit({ id: true, status: true, response: true, entitlementId: true, createdAt: true, updatedAt: true }).extend({ website: z.string().max(0).optional().default(""), completionTimeMs: z.number().int().min(2500) });
+export async function POST(request: Request) { if (!featureFlags.paidQuestionsEnabled) return NextResponse.json({ ok: false, error: "Paid knowledge requests are disabled." }, { status: 404 }); const key = `question:${request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local"}`; if (!await memoryRateLimit.check(key)) return NextResponse.json({ ok: false, error: "Please wait before trying again." }, { status: 429 }); try { const input = inputSchema.parse(await request.json()); if (input.type !== "paid-question" && input.type !== "video-answer") throw new Error("Unsupported public request type."); const now = new Date().toISOString(); const record = serviceRequestSchema.parse({ ...input, id: crypto.randomUUID(), status: input.orderId ? "submitted" : "awaiting-payment", response: null, entitlementId: null, createdAt: now, updatedAt: now }); await new LocalServiceRequestRepository().save(record); return NextResponse.json({ ok: true, requestId: record.id, status: record.status }); } catch (error) { return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : "Request could not be created." }, { status: 400 }); } }

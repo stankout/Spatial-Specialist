@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { complianceConfig } from "@/data/compliance.config";
 import { activeCredentials } from "@/data/credentials.config";
 import { locations } from "@/data/locations.config";
-import type { Locale } from "@/data/site.config";
+import { getPublicServices, type Locale } from "@/data/site.config";
 import { contentPath, PublishedContentStrip } from "@/components/public-content";
 import { publicContent } from "@/lib/content-studio/repository";
 import {ServiceClaritySection} from "@/components/strategy-sections";
@@ -36,11 +36,12 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
   const isDevelopment = process.env.NODE_ENV === "development";
   const featuredMedia = entries.find((item) => item.type === "video" || item.featured);
   const credentials = activeCredentials();
+  const publicServices = getPublicServices();
 
   return <div className="deal-hub">
     <section data-visual-section="hero" data-tone="glass" className="deal-hero story-surface-glass story-text-dark">
       <div className="deal-hero-copy">
-        <div className="deal-index"><span>01 / 03</span><strong>DEAL</strong></div>
+        <div className="deal-index"><span>PUBLIC / ACTIVE</span><strong>DEAL</strong></div>
         <p className="eyebrow">Anh Cao · Real Estate · Georgia</p>
         <h1>{vi ? <>Quyết định bất động sản<br /><em>với nhiều bối cảnh hơn.</em></> : <>Real estate decisions<br /><em>with more context.</em></>}</h1>
         <div className="deal-hero-bottom">
@@ -52,7 +53,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
         <span className="media-label">Georgia / Property perspective</span>
         <div className="deal-abstract-mark" aria-hidden="true"><span>01</span><strong>DEAL</strong></div>
       </div>
-      <div className="deal-continuum" aria-label="Deal, Condition, Space"><strong>Deal</strong><span>Condition</span><span>Space</span></div>
+      <div className="deal-continuum" aria-label={publicServices.map(service=>service.lens).join(", ")}>{publicServices.map(service=>service.key==="deal"?<strong key={service.key}>{service.lens}</strong>:<span key={service.key}>{service.lens}</span>)}</div>
     </section>
 
     {credentials.length > 0 && <div className="deal-credentials">{credentials.map((credential) => <span key={credential}>{credential}</span>)}</div>}
@@ -66,7 +67,7 @@ export async function RealEstateHub({ locale }: { locale: Locale }) {
 
     <section data-tone="glass" className="deal-intro story-surface-glass story-text-dark">
       <div><p className="eyebrow">{vi ? "Chọn lộ trình" : "Choose your pathway"}</p><h2>{vi ? "Ba mục tiêu. Một tiêu chuẩn rõ ràng hơn." : "Three goals. One clearer standard."}</h2></div>
-      <p>{vi ? "Real Estate là góc nhìn DEAL trong hệ thống Anh Cao. Dịch vụ này độc lập với Home Inspection và Spatial Consultation; khách hàng chọn đúng hỗ trợ cần thiết cho quyết định của mình." : "Real Estate is the DEAL lens in the Anh Cao system. It stands independently from Home Inspection and Spatial Consultation, so clients can choose only the support their decision needs."}</p>
+      <p>{vi ? "Real Estate là góc nhìn DEAL trong hệ thống Anh Cao. Dịch vụ hoạt động độc lập với Spatial Consultation, để khách hàng chọn đúng hỗ trợ cần thiết cho quyết định của mình." : "Real Estate is the DEAL lens in the Anh Cao system. It stands independently from Spatial Consultation, so clients can choose only the support their decision needs."}</p>
     </section>
 
     <section data-visual-section="pathways" className="deal-pathways" id="pathways" aria-label={vi ? "Lộ trình bất động sản" : "Real estate pathways"}>

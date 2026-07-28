@@ -13,6 +13,7 @@ export function VisualPreviewBridge({page,locale}:{page:VisualPageKey;locale:"en
       if(!parsed.success||parsed.data.page!==page||parsed.data.locale!==locale)return;
       const root=document.querySelector<HTMLElement>(`[data-visual-page="${page}"]`);if(!root)return;
       const settings=resolveVisualSettings(parsed.data.config,page,locale),variables=visualCssVariables(settings),attributes=visualPreviewAttributes(settings);
+      for(const property of Array.from(root.style))if(property.startsWith("--visual-")||property.startsWith("--fg-"))root.style.removeProperty(property);
       for(const [key,value] of Object.entries(variables))root.style.setProperty(key,value);
       for(const [key,value] of Object.entries(attributes))root.setAttribute(key,value);
       root.dataset.visualCustomSurface=String(hasCustomVisualSurface(parsed.data.config,page,locale));

@@ -1,2 +1,4 @@
-export type AnalyticsEvent = "book_page_view"|"service_selected"|"lead_form_started"|"lead_form_submitted"|"lead_form_error"|"contact_click"|"phone_click"|"booking_external_click";
+export type AnalyticsEvent = "page_view"|"service_cta"|"lead_submit"|"booking_request"|"product_view"|"add_to_cart"|"checkout_start"|"checkout_complete"|"affiliate_click"|"video_play"|"book_page_view"|"service_selected"|"lead_form_started"|"lead_form_submitted"|"lead_form_error"|"contact_click"|"phone_click"|"booking_external_click";
+export interface AnalyticsProvider { name:string; track(name:AnalyticsEvent,data:Record<string,string>):void }
+export const browserEventAnalytics:AnalyticsProvider={name:"browser-event",track(name,data){if(typeof window!=="undefined")window.dispatchEvent(new CustomEvent("spatial:analytics",{detail:{name,data}}))}};
 export function trackEvent(name:AnalyticsEvent, data:Record<string,string> = {}) { if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("spatial:analytics", { detail:{name,data} })); }

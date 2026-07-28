@@ -1,0 +1,4 @@
+import { z } from "zod";
+export const serviceRequestSchema = z.object({ id: z.string(), type: z.enum(["paid-question", "video-answer", "live-consultation", "spatial-consultation", "real-estate-consultation"]), status: z.enum(["draft", "awaiting-payment", "submitted", "reviewing", "completed", "cancelled"]), locale: z.enum(["en", "vi"]), customerId: z.string().nullable().default(null), contact: z.object({ name: z.string().max(120), email: z.string().email().max(254) }), question: z.string().max(5_000).default(""), response: z.object({ type: z.enum(["text", "audio", "video"]), text: z.string().max(20_000).default(""), assetId: z.string().nullable().default(null) }).nullable().default(null), catalogItemId: z.string().nullable().default(null), orderId: z.string().nullable().default(null), entitlementId: z.string().nullable().default(null), createdAt: z.string(), updatedAt: z.string() });
+export type ServiceRequest = z.infer<typeof serviceRequestSchema>;
+

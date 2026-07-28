@@ -4,7 +4,7 @@ import type {MediaAsset,MediaSlotKey} from "@/lib/media/types";
 export type MediaRenderContext="studio"|"source-preview"|"slot-preview"|"public"|"story-backdrop-primary"|"story-backdrop-ambient";
 export type MediaQuality="below-web-ready"|"web-ready"|"large-display-ready"|"4k-ready";
 const portraitRoles=new Set<MediaAsset["mediaRole"]>(["owner-portrait","page-portrait"]);
-const alwaysContainRoles=new Set<MediaAsset["mediaRole"]>(["compass-portrait","compass-diagram","diagram","general-media","inline-image","spatial-analysis-image","inspection-image","video-thumbnail"]);
+const alwaysContainRoles=new Set<MediaAsset["mediaRole"]>(["compass-portrait","compass-diagram","diagram","document-reference","logo","download-asset","general-media","content-image","inline-image","spatial-analysis-image","inspection-image","video-thumbnail","product-media"]);
 
 export function getMediaQuality(asset:Pick<MediaAsset,"width"|"height">):MediaQuality{const long=Math.max(asset.width,asset.height),short=Math.min(asset.width,asset.height);if(long>=3840&&short>=2160)return "4k-ready";if(long>=2560&&short>=1440)return "large-display-ready";if(long>=1200&&short>=800)return "web-ready";return "below-web-ready"}
 export function getMediaOrientation(asset:Pick<MediaAsset,"width"|"height">){const ratio=asset.height?asset.width/asset.height:1;return ratio<.8?"portrait":ratio>1.25?"landscape":"square"}

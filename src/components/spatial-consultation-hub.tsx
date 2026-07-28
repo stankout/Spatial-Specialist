@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { complianceConfig } from "@/data/compliance.config";
-import type { Locale } from "@/data/site.config";
+import { getPublicServices, type Locale } from "@/data/site.config";
 import { spatialConfig } from "@/data/spatial.config";
 import { PublishedContentStrip } from "@/components/public-content";
 import {ServiceClaritySection} from "@/components/strategy-sections";
@@ -43,11 +43,13 @@ export function SpatialConsultationHub({ locale,media={},draftPreview=false }: {
   const approvedMedia = spatialConfig.media.filter((item) => item.approved);
   const approvedStudies = spatialConfig.caseStudies.filter((item) => item.approved && !item.demo);
   const compassPortrait=media["spatial.compassPortrait"];
+  const publicServices = getPublicServices();
+  const relatedServices = publicServices.filter((service) => service.key !== "space");
 
   return <div className="space-hub">
     <section data-visual-section="hero" data-tone="glass" className="space-hero story-surface-glass story-text-dark">
       <div className="space-hero-copy">
-        <div className="space-index"><span>03 / 03</span><strong>SPACE</strong></div>
+        <div className="space-index"><span>PUBLIC / ACTIVE</span><strong>SPACE</strong></div>
         <p className="eyebrow">Anh Cao · Spatial Specialist</p>
         <h1>{vi ? <>Đọc không gian<br /><em>trước khi thay đổi.</em></> : <>Read the space<br /><em>before changing it.</em></>}</h1>
         <div className="space-hero-bottom"><p>{vi ? "Hiểu cách một tài sản được định hướng, tổ chức, trải nghiệm và sử dụng—với diễn giải Phong Thủy truyền thống khi khách hàng yêu cầu." : "Understand how a property is oriented, organized, experienced, and used—with traditional Feng Shui interpretation when requested."}</p><div><Link className="space-primary-link" href={`/${locale}/book?service=spatial`}>{vi ? "Đặt lịch tư vấn không gian" : "Book a spatial consultation"}<ArrowRight /></Link><a className="space-secondary-link" href="#method">{vi ? "Khám phá phương pháp" : "Explore the method"}</a></div></div>
@@ -55,12 +57,12 @@ export function SpatialConsultationHub({ locale,media={},draftPreview=false }: {
       {compassPortrait?<figure className="space-hero-portrait">{draftPreview&&<span className="development-preview-label">DRAFT MEDIA PREVIEW</span>}<MediaImage asset={compassPortrait} context="public" slot="spatial.compassPortrait" alt={compassPortrait.alt[locale]||compassPortrait.alt.en||""} fill priority sizes="(max-width: 1100px) 100vw, 36vw"/><figcaption>SPACE · {vi?"Quan sát & định hướng":"Observation & orientation"}</figcaption></figure>:<div className="space-hero-diagram" role="img" aria-label={vi ? "Sơ đồ trừu tượng về phương hướng và quan hệ không gian" : "Abstract diagram of orientation and spatial relationships"}>
         <span className="space-coordinate">N / 00°</span><div className="space-plan" aria-hidden="true"><i /><i /><i /><i /><b>SPACE</b></div><div className="space-cardinals"><span>W</span><strong>N</strong><span>E</span><span>S</span></div>
       </div>}
-      <div className="space-continuum" aria-label="Deal, Condition, Space"><span>Deal</span><span>Condition</span><strong>Space</strong></div>
+      <div className="space-continuum" aria-label={publicServices.map(service=>service.lens).join(", ")}>{publicServices.map(service=>service.key==="space"?<strong key={service.key}>{service.lens}</strong>:<span key={service.key}>{service.lens}</span>)}</div>
     </section>
 
     <section data-visual-section="pathways" data-tone="glass" className="space-pathways story-surface-glass story-text-dark">
       <div className="space-heading space-heading-row"><div><p className="eyebrow">{vi ? "Lộ trình tư vấn" : "Consultation pathways"}</p><h2>{vi ? "Bắt đầu từ cách không gian cần vận hành." : "Begin with how the space needs to work."}</h2></div><p>{vi ? "Mỗi lộ trình là một dịch vụ độc lập. Phạm vi được xác nhận theo tài sản, mục tiêu và thông tin có thể cung cấp." : "Each pathway stands independently. Scope is confirmed around the property, objective, and information available."}</p></div>
-      <div className="space-pathway-grid">{activePathways.map(([key, item], index) => { const content = pathwayContent[key][locale]; return <Link href={`/${locale}/spatial-consultation/${item.href}`} key={key}><span>0{index + 1}</span><small>{content.label}</small><h3>{content.title}</h3><p>{content.copy}</p><b>{vi ? "Xem lộ trình" : "Explore pathway"}<ArrowUpRight /></b></Link>; })}</div>
+      <ol className="space-pathway-circuit">{activePathways.map(([key, item], index) => { const content = pathwayContent[key][locale]; return <li key={key}><Link href={`/${locale}/spatial-consultation/${item.href}`}><span>0{index + 1}</span><small>{content.label}</small><h3>{content.title}</h3><p>{content.copy}</p><b>{vi ? "Xem lộ trình" : "Explore pathway"}<ArrowUpRight /></b></Link></li>; })}</ol>
     </section>
 
     <section data-visual-section="methodology" data-tone="dark" className="space-method story-surface-dark story-text-light" id="method">
@@ -86,7 +88,7 @@ export function SpatialConsultationHub({ locale,media={},draftPreview=false }: {
     {approvedMedia.length > 0 && <section className="space-media"><div className="space-heading"><p className="eyebrow">{vi ? "Phân tích & giáo dục" : "Analysis & education"}</p><h2>{vi ? "Nhìn không gian qua ví dụ được duyệt." : "See spatial thinking in context."}</h2></div><div>{approvedMedia.map((item) => <a href={item.href} key={item.href}><Play /><span>{item.type}</span><strong>{item.title}</strong></a>)}</div></section>}
     {approvedStudies.length > 0 && <section className="space-case-studies"><div className="space-heading"><p className="eyebrow">Case studies</p><h2>{vi ? "Phân tích tài sản đã được phê duyệt." : "Approved property analyses."}</h2></div>{approvedStudies.map((study) => <Link href={`/${locale}/spatial-consultation/case-studies/${study.slug}`} key={study.slug}><span>{study.projectType}</span><strong>{study.propertyType}</strong><ArrowUpRight /></Link>)}</section>}
 
-    <section className="space-conversion story-surface-dark story-text-light"><div><p className="eyebrow">{vi ? "Bước tiếp theo" : "Next orientation"}</p><h2>{vi ? "Không gian nào cần được hiểu rõ hơn?" : "Which space needs a clearer reading?"}</h2><p>{vi ? "Chọn loại tư vấn trong một booking pathway duy nhất." : "Choose the consultation type through one focused booking pathway."}</p><Link className="space-primary-link" href={`/${locale}/book?service=spatial`}>{vi ? "Đặt lịch tư vấn không gian" : "Book a spatial consultation"}<ArrowRight /></Link></div><nav aria-label={vi ? "Dịch vụ liên quan" : "Related independent services"}><p>{vi ? "Các góc nhìn độc lập" : "Independent perspectives"}</p><Link href={`/${locale}/real-estate`}>01 · DEAL <span>{vi ? "Hỗ trợ mua bán bất động sản" : "Real estate guidance"}</span><ArrowUpRight /></Link><Link href={`/${locale}/home-inspection`}>02 · CONDITION <span>{vi ? "Hiểu tình trạng vật lý" : "Understand physical condition"}</span><ArrowUpRight /></Link></nav></section>
+    <section className="space-conversion story-surface-dark story-text-light"><div><p className="eyebrow">{vi ? "Bước tiếp theo" : "Next orientation"}</p><h2>{vi ? "Không gian nào cần được hiểu rõ hơn?" : "Which space needs a clearer reading?"}</h2><p>{vi ? "Chọn loại tư vấn trong một booking pathway duy nhất." : "Choose the consultation type through one focused booking pathway."}</p><Link className="space-primary-link" href={`/${locale}/book?service=spatial`}>{vi ? "Đặt lịch tư vấn không gian" : "Book a spatial consultation"}<ArrowRight /></Link></div><nav aria-label={vi ? "Dịch vụ liên quan" : "Related independent services"}><p>{vi ? "Các góc nhìn độc lập" : "Independent perspectives"}</p>{relatedServices.map(service=><Link href={`/${locale}/${service.slug}`} key={service.key}>{service.lens} <span>{vi?service.titleVi:service.title}</span><ArrowUpRight /></Link>)}</nav></section>
     <ServiceClaritySection locale={locale} service="space" />
     <PublishedContentStrip locale={locale} service="space" />
     <div className="space-compliance"><p>{complianceConfig.notices.spatial}</p></div>

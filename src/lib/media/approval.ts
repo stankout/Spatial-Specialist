@@ -9,3 +9,14 @@ export function getPublicMediaEligibility(asset:MediaAsset){
  ] as const;
  return {checks,eligible:checks.every(check=>check.passed)};
 }
+
+export function getMediaWorkflowState(asset:MediaAsset){
+ const eligibility=getPublicMediaEligibility(asset);
+ const metadataComplete=Boolean((asset.mimeType.startsWith("video/")||asset.alt.en||asset.alt.vi)&&(asset.title.en||asset.title.vi));
+ if(!asset.imported)return {state:"Imported",missing:["Complete import"]};
+ const missing=[...(!metadataComplete?["Title and accessible metadata"]:[]),...eligibility.checks.filter(check=>!check.passed).map(check=>check.label)];
+ if(asset.approvedForPublicUse&&eligibility.eligible)return {state:"Published use",missing:[]};
+ if(eligibility.checks.slice(0,3).every(check=>check.passed)&&metadataComplete)return {state:"Ready",missing:["Approve for public use"]};
+ if(!metadataComplete)return {state:"Metadata incomplete",missing};
+ return {state:"Owner review required",missing};
+}

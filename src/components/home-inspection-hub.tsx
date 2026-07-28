@@ -59,7 +59,7 @@ export async function HomeInspectionHub({ locale }: { locale: Locale }) {
   return <div className="condition-hub">
     <section data-visual-section="hero" data-tone="glass" className="condition-hero story-surface-glass story-text-dark">
       <div className="condition-hero-copy">
-        <div className="condition-index"><span>02 / 03</span><strong>CONDITION</strong></div>
+        <div className="condition-index"><span>INTERNAL / HIDDEN</span><strong>CONDITION</strong></div>
         <p className="eyebrow">Anh Cao · Home Inspection · Georgia</p>
         <h1>{vi ? <>Hiểu tình trạng.<br /><em>Quan sát có hệ thống.</em></> : <>Understand condition.<br /><em>Observe systematically.</em></>}</h1>
         <p className="condition-lede">{vi ? "Một góc nhìn bình tĩnh, kỹ thuật về các hệ thống nhìn thấy được—để phân biệt dữ kiện, giới hạn và bước theo dõi phù hợp." : "A calm, technical view of visible property systems—separating observations, limitations, and appropriate follow-up."}</p>

@@ -1,0 +1,6 @@
+import { FeatureBadge, StudioPlatformPage, StudioRecordTable } from "@/components/studio-platform";
+import { featureFlags, platformConfig } from "@/data/platform.config";
+import { LocalOrderRepository } from "@/lib/orders/repository";
+import { formatMoney, money } from "@/lib/platform/money";
+export default async function Page() { const orders = await new LocalOrderRepository().list(); return <StudioPlatformPage active="commerce" eyebrow="Orders & providers" title="Commerce" description="Order snapshots, checkout status, delivery readiness, and provider configuration without exposing payment credentials."><div className="studio-feature-strip"><FeatureBadge enabled={featureFlags.commerceEnabled}>Commerce</FeatureBadge><FeatureBadge enabled={featureFlags.paymentsEnabled}>Payments</FeatureBadge><span>Provider · {platformConfig.providers.payments}</span></div><StudioRecordTable headings={["Order", "Customer", "Total", "Status"]} empty="No local orders. Mock orders appear only after a development checkout." rows={orders.map((order) => [order.id.slice(0, 8), order.contact.email, formatMoney(money(order.totalMinor)), `${order.paymentStatus} / ${order.fulfillmentStatus}`])}/></StudioPlatformPage>; }
+

@@ -4,23 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Building2, CalendarDays, Mail, MapPin, Menu, Phone, UserRound, X } from "lucide-react";
 import { useState, type CSSProperties } from "react";
-import { siteConfig, type Locale } from "@/data/site.config";
+import { getPublicServices, siteConfig, type Locale } from "@/data/site.config";
 import { getDictionary } from "@/lib/i18n";
 import {visualCssVariables,type VisualSettings} from "@/lib/visuals/config";
+import {getPublicNavigation} from "@/lib/navigation";
 
-export function Header({ locale }: { locale: Locale }) {
+type PublicAvailability={catalog:boolean;portfolio:boolean};
+export function Header({ locale,availability={catalog:false,portfolio:false} }: { locale: Locale;availability?:PublicAvailability }) {
   const [open, setOpen] = useState(false);
   const dictionary = getDictionary(locale);
   const pathname = usePathname();
   const otherLocale = locale === "en" ? "vi" : "en";
   const switchedPath = pathname.replace(/^\/(en|vi)/, `/${otherLocale}`);
-  const links = [
-    [dictionary.nav.about, "/about"],
-    [dictionary.nav.services, "/services"],
-    [dictionary.nav.videos, "/videos"],
-    [dictionary.nav.guides, "/guides"],
-    [dictionary.nav.contact, "/contact"],
-  ] as const;
+  const links = getPublicNavigation(locale,availability);
 
   const isActive = (href: string) => pathname === `/${locale}${href}` || pathname.startsWith(`/${locale}${href}/`);
 
@@ -35,8 +31,8 @@ export function Header({ locale }: { locale: Locale }) {
           </div>
         </Link>
         <nav className="desktop-nav" aria-label="Primary">
-          {links.map(([label, href]) => (
-            <Link className={isActive(href) ? "nav-active" : undefined} aria-current={isActive(href) ? "page" : undefined} key={href} href={`/${locale}${href}`}>
+          {links.map(({label,href,key}) => (
+            <Link className={isActive(href) ? "nav-active" : undefined} aria-current={isActive(href) ? "page" : undefined} key={key} href={`/${locale}${href}`}>
               {label}
             </Link>
           ))}
@@ -53,8 +49,8 @@ export function Header({ locale }: { locale: Locale }) {
       {open && (
         <nav className="mobile-menu" aria-label="Mobile">
           <span className="mobile-menu-label">Anh Cao / Property Intelligence</span>
-          {links.map(([label, href], index) => (
-            <Link onClick={() => setOpen(false)} key={href} href={`/${locale}${href}`}>
+          {links.map(({label,href,key}, index) => (
+            <Link onClick={() => setOpen(false)} key={key} href={`/${locale}${href}`}>
               <span>0{index + 1}</span>{label}
             </Link>
           ))}
@@ -70,19 +66,17 @@ function ArrowMark() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function Footer({ locale,visuals }: { locale: Locale;visuals?:VisualSettings }) {
+export function Footer({ locale,visuals,availability={catalog:false,portfolio:false} }: { locale: Locale;visuals?:VisualSettings;availability?:PublicAvailability }) {
   const vi=locale==="vi";
+  const publicServiceLenses=getPublicServices().map(service=>service.lens).join(" · ");
   const secondaryLinks=[
-    [vi?"Giới thiệu":"About","/about"],
-    [vi?"Video":"Videos","/videos"],
-    [vi?"Cẩm nang":"Guides","/guides"],
-    [vi?"Liên hệ":"Contact","/contact"],
+    ...getPublicNavigation(locale,availability).filter(item=>item.key!=="services"&&item.key!=="search").map(item=>[item.label,item.href] as const),
     [vi?"Quyền riêng tư":"Privacy","/privacy"],
     [vi?"Điều khoản":"Terms","/terms"],
     [vi?"Trợ năng":"Accessibility","/accessibility"],
   ] as const;
-  return <footer className="cyber-footer" data-tone="dark" data-footer-surface={visuals?.footer.surface} data-footer-alignment={visuals?.footer.alignment} data-footer-type={visuals?.footer.typeStyle} data-visual-accent={visuals?.footer.accent} style={visuals?visualCssVariables(visuals) as CSSProperties:undefined}>
-    <div className="footer-signal-rail"><span>AC / SPATIAL SPECIALIST</span><span>{vi?"HỆ THỐNG LIÊN HỆ":"CONTACT SYSTEM"} · 03—03</span></div>
+  return <footer className="cyber-footer" data-tone="dark" data-footer-surface={visuals?.footer.surface} data-footer-alignment={visuals?.footer.alignment} data-footer-type={visuals?.footer.typeStyle} data-visual-accent={visuals?.footer.accent} style={visuals?visualCssVariables(visuals,"dark") as CSSProperties:undefined}>
+    <div className="footer-signal-rail"><span>AC / SPATIAL SPECIALIST</span><span>{vi?"HỆ THỐNG LIÊN HỆ":"CONTACT SYSTEM"} · PUBLIC / ACTIVE</span></div>
     <div className="footer-terminal-heading"><p className="eyebrow">{vi?"Kênh liên hệ trực tiếp":"Direct contact channels"}</p><h2>{vi?"Kết nối đúng góc nhìn.":"Connect with the right perspective."}</h2></div>
     <div className="footer-contact-grid">
       <section aria-labelledby="footer-real-estate">
@@ -95,7 +89,7 @@ export function Footer({ locale,visuals }: { locale: Locale;visuals?:VisualSetti
       </section>
     </div>
     <nav className="footer-nav" aria-label={vi?"Liên kết cuối trang":"Footer navigation"}>{secondaryLinks.map(([label,href])=><Link key={href} href={`/${locale}${href}`}>{label}</Link>)}</nav>
-    <div className="footer-bottom"><span>© {new Date().getFullYear()} {siteConfig.businessName}</span><span>DEAL · CONDITION · SPACE / {siteConfig.locationLabel}</span></div>
+    <div className="footer-bottom"><span>© {new Date().getFullYear()} {siteConfig.businessName}</span><span>{publicServiceLenses} / {siteConfig.locationLabel}</span></div>
   </footer>;
 }
 

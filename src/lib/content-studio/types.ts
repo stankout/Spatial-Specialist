@@ -1,7 +1,7 @@
 import {z} from "zod";
 import {mediaSlotKeys} from "@/lib/media/types";
 
-export const contentTypeSchema=z.enum(["video","article","guide","property-analysis","inspection-education","spatial-analysis"]);
+export const contentTypeSchema=z.enum(["video","article","guide","portfolio","property-analysis","inspection-education","spatial-analysis"]);
 export const contentStatusSchema=z.enum(["draft","published","archived"]);
 export const serviceCategorySchema=z.enum(["deal","condition","space","general"]);
 export const localeSchema=z.enum(["en","vi"]);
