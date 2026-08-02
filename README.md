@@ -1,12 +1,13 @@
 # Anh Cao × Spatial Specialist LLC
 
-Production-ready bilingual website foundation for three independent property service lines:
+Local bilingual website and business-platform foundation for two active public service perspectives:
 
-- Real Estate
-- Home Inspection education and future services
-- Spatial & Feng Shui Consultation
+- DEAL / Real Estate
+- SPACE / Spatial Consultation
 
-The product follows the strategic idea **“One property. Three perspectives.”** English is the default locale at `/en`; Vietnamese is available at `/vi` with equivalent routes.
+CONDITION / Home Inspection remains defined internally but inactive and publicly hidden. English is the default locale at `/en`; Vietnamese is available at `/vi` with equivalent routes.
+
+Start with [AC Knowledge Architecture](docs/00-core/START_HERE.md). Current implementation reality is maintained in [CURRENT_STATE](docs/00-core/CURRENT_STATE.md); roadmap items and Workbench material are not approvals.
 
 ## Local development
 

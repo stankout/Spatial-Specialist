@@ -4,6 +4,14 @@ This repository is the technical operating system for Stan Kout's long-term AI-a
 
 All AI coding agents, human collaborators, and future automation workflows must read this file before making changes.
 
+## Canonical Knowledge Boot Sequence
+
+Before repository work, read `docs/00-core/START_HERE.md`, then follow `docs/00-core/AI_HANDOFF.md` and verify implementation reality in `docs/00-core/CURRENT_STATE.md`. Documentation authority and lifecycle are governed by `docs/00-core/DOCUMENTATION_GOVERNANCE.md`.
+
+Persistent invariants: DEAL and SPACE are the only active public service perspectives; CONDITION is inactive and publicly hidden; Draft is not Published; Assignment is not Approval; organizational Role is not software Capability; production fails closed. Workbench, Archive, References, roadmap items, and conversations are not canonical requirements.
+
+For AC website and platform work, the repository knowledge architecture is the durable source of company specifications and verified implementation state. External task systems may coordinate work but do not silently override canonical AC documents.
+
 ## Core Mission
 
 Stan Kout AI Career OS supports a 20-year career path that starts with Real Estate / Nha Dat, Georgia Real Estate licensing, future broker practice, real estate consultation, Feng Shui spatial organizing, and AI-assisted client intake, analysis, recommendation, document generation, and project management.

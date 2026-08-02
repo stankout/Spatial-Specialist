@@ -1,5 +1,7 @@
 # Brand System
 
+> Legacy implementation summary. The canonical brand-domain candidate is [docs/10-brand/BRAND_SYSTEM.md](10-brand/BRAND_SYSTEM.md); visual implementation detail remains useful here but cannot override that document's lifecycle or Owner decisions.
+
 The visual direction is premium, architectural, editorial, and calm—not decorative luxury.
 
 - Charcoal `#171a17`: authority and technical clarity.

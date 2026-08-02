@@ -1,5 +1,7 @@
 # AC Spatial Specialist Platform Handoff
 
+> Legacy technical handoff retained for implementation detail. The canonical agent entry point is [AI_HANDOFF.md](00-core/AI_HANDOFF.md), and current implementation reality is [CURRENT_STATE.md](00-core/CURRENT_STATE.md).
+
 ## System map
 
 - **Public website:** localized Next.js App Router routes under `src/app/[locale]`.
@@ -39,4 +41,3 @@ Use preview deployments and owner review before production. Environment values b
 ## Roles and ownership
 
 The owner controls user administration, production credentials, payments, and destructive provider changes. Developers manage technical integration and deployment only when explicitly authorized. Managers run normal operations. Content editors prepare content/media without elevated publication or infrastructure access. See `docs/USER_ROLES.md` for the capability source of truth.
-
