@@ -12,6 +12,17 @@ Persistent invariants: DEAL and SPACE are the only active public service perspec
 
 For AC website and platform work, the repository knowledge architecture is the durable source of company specifications and verified implementation state. External task systems may coordinate work but do not silently override canonical AC documents.
 
+## AC Local Visual Reference Library
+
+Before visual, motion, HUD, dashboard, Market Pulse, background, overlay, or presentation work, check the Owner-provided reference roots at `E:\Real Estate\Phôi\Phôi Website\Phôi Video Samples` and `E:\Real Estate\Phôi\Phôi Website\Phôi HUD`. Follow the full [Local Visual Reference Asset Policy](docs/95-workbench/media/REFERENCE_ASSET_USAGE_POLICY.md).
+
+- Treat both roots as read-only and inspect only the task-relevant sample. Never rename, move, overwrite, clean, delete, or destructively convert source files.
+- Never create a production or runtime dependency on an `E:\...` path. A reference may become a repository asset only through an approved export/import with provenance and the existing Media Library, Page Assets, and Visual Director controls.
+- Reference access is not runtime approval. Preserve watermarks, third-party logos, and source metadata; uncertain rights, private information, or visible third-party marks block publication until explicitly cleared.
+- Use HUD material as presentation evidence, never as business or market truth. Do not fabricate market values, sentiment, charts, timestamps, property information, or operational states.
+- Future Market Pulse work must separate presentation, verified factual data, and loading/stale/unavailable/error states. Do not implement it until the Owner supplies and approves the required dashboard example.
+- Preserve the repository invariants above: DEAL and SPACE are active; CONDITION remains inactive and publicly hidden; Draft is not Published; Assignment is not Approval; Role is not Capability; production fails closed.
+
 ## Core Mission
 
 Stan Kout AI Career OS supports a 20-year career path that starts with Real Estate / Nha Dat, Georgia Real Estate licensing, future broker practice, real estate consultation, Feng Shui spatial organizing, and AI-assisted client intake, analysis, recommendation, document generation, and project management.
