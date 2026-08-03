@@ -17,6 +17,9 @@ import { readVisualStore } from "@/lib/visuals/storage";
 import "../globals.css";
 import "../art-direction.css";
 import "../foreground-system.css";
+import "../living-visual-engine.css";
+import "../motion-media-system.css";
+import "../public-art-direction.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -43,7 +46,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   ]);
   const map = (assignment: (typeof assignments)[number], draft = false) => {
     const asset = assets.find((item) => item.id === assignment.assetId);
-    return asset ? [{ slot: assignment.slot, url: asset.url, provider: asset.provider, mimeType: asset.mimeType, width: asset.width, height: asset.height, presentation: assignment.presentation, draft } satisfies StoryBackdropItem] : [];
+    return asset ? [{ slot: assignment.slot, url: asset.url, provider: asset.provider, mimeType: asset.mimeType, sourceType:asset.sourceType, sceneId:asset.sceneId, decorative:asset.decorative, width: asset.width, height: asset.height, presentation: assignment.presentation, draft } satisfies StoryBackdropItem] : [];
   };
   const backdrops = [
     ...assignments.filter((item) => item.slot.includes("storyBackdrop")).flatMap((item) => map(item)),

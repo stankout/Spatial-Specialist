@@ -22,7 +22,7 @@ export function ServicePillarCards({ locale }: { locale: Locale }) {
   return (
     <div className="service-grid" data-service-count={services.length}>
       {services.map((service) => (
-        <Link className={`service-card ${service.slug}`} href={`/${locale}/${service.slug}`} key={service.key}>
+        <Link className={`service-card ${service.slug}`} data-service-lens={service.key} href={`/${locale}/${service.slug}`} key={service.key}>
           <div className="service-top">
             <span>{locale === "vi" ? "GÓC NHÌN" : "PERSPECTIVE"}</span>
             <span className="service-lens">{service.lens}</span>

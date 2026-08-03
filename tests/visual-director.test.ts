@@ -4,9 +4,44 @@ import {acceptPublishedVisuals,acceptSavedDraft,countVisualChanges,createVisualE
 import {createVisualPreviewMessage,createVisualPreviewReadyMessage,visualPreviewModel,visualPreviewMessageSchema,visualPreviewReadyMessageSchema} from "@/lib/visuals/preview";
 
 describe("Studio Visual Director",()=>{
-  it("keeps Baseline V1 deterministic when no override exists",()=>{
-    expect(resolveVisualSettings(baselineVisualConfig,"homepage","en")).toEqual(baselineVisualSettings);
-    expect(visualCssVariables(resolveVisualSettings(baselineVisualConfig,"homepage","en"))["--visual-ambient-blur"]).toBe("30px");
+  it("keeps Baseline V1 deterministic while applying the semantic page profile",()=>{
+    const resolved=resolveVisualSettings(baselineVisualConfig,"homepage","en");
+    expect({
+      accent:resolved.accent,
+      backdrop:{enabled:resolved.backdrop.enabled,ambientBlur:resolved.backdrop.ambientBlur},
+      surface:{mode:resolved.surface.mode,opacity:resolved.surface.opacity},
+      foreground:resolved.foreground,
+      motion:{enabled:resolved.motion.enabled,theme:resolved.motion.theme,intensity:resolved.motion.intensity,pauseOffscreen:resolved.motion.pauseOffscreen},
+      ambient:{enabled:resolved.ambient.enabled,glowStrength:resolved.ambient.glowStrength,nodeNetwork:resolved.ambient.nodeNetwork,lineSweep:resolved.ambient.lineSweep},
+      grid:{enabled:resolved.grid.enabled,style:resolved.grid.style,opacity:resolved.grid.opacity,scan:resolved.grid.scan},
+      transition:{style:resolved.transition.style,duration:resolved.transition.duration},
+      procedural:resolved.procedural,
+    }).toEqual({
+      accent:"service-default",
+      backdrop:{enabled:true,ambientBlur:30},
+      surface:{mode:"glass",opacity:76},
+      foreground:{mode:"auto",autoContrast:true,customColor:"#f4f1e8"},
+      motion:{enabled:true,theme:"property-intelligence",intensity:34,pauseOffscreen:true},
+      ambient:{enabled:true,glowStrength:18,nodeNetwork:true,lineSweep:12},
+      grid:{enabled:true,style:"architectural",opacity:10,scan:"horizontal"},
+      transition:{style:"depth",duration:.72},
+      procedural:{mode:"page-default",sceneId:"ac-ambient-intelligence",intensity:34,motionSpeed:.72},
+    });
+    expect(visualCssVariables(resolved)["--visual-ambient-blur"]).toBe("30px");
+
+    const legacy=structuredClone(baselineVisualConfig) as unknown as Record<string,unknown>;
+    const legacyGlobal=legacy.global as Record<string,unknown>;
+    delete legacyGlobal.motion;
+    delete legacyGlobal.ambient;
+    delete legacyGlobal.grid;
+    delete legacyGlobal.transition;
+    delete legacyGlobal.procedural;
+    const normalized=visualConfigSchema.parse(legacy);
+    expect(normalized.global.motion).toEqual({enabled:true,theme:"calm",intensity:28,speed:1,parallax:true,parallaxStrength:7,hoverEnergy:20,pauseOffscreen:true});
+    expect(normalized.global.procedural).toEqual({mode:"page-default",sceneId:"ac-ambient-intelligence",intensity:28,motionSpeed:.72});
+
+    const reduced=resolveVisualSettings(applyVisualPreset(normalized,"homepage","motion-off"),"homepage","en");
+    expect({motion:reduced.motion.enabled,ambient:reduced.ambient.enabled,grid:reduced.grid.enabled,transition:reduced.transition.style}).toEqual({motion:false,ambient:false,grid:false,transition:"none"});
   });
 
   it("inherits global, page, section, then locale values",()=>{

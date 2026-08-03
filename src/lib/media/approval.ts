@@ -12,7 +12,7 @@ export function getPublicMediaEligibility(asset:MediaAsset){
 
 export function getMediaWorkflowState(asset:MediaAsset){
  const eligibility=getPublicMediaEligibility(asset);
- const metadataComplete=Boolean((asset.mimeType.startsWith("video/")||asset.alt.en||asset.alt.vi)&&(asset.title.en||asset.title.vi));
+ const metadataComplete=Boolean((asset.decorative||asset.sourceType==="procedural-scene"||asset.mimeType.startsWith("video/")||asset.alt.en||asset.alt.vi)&&(asset.title.en||asset.title.vi));
  if(!asset.imported)return {state:"Imported",missing:["Complete import"]};
  const missing=[...(!metadataComplete?["Title and accessible metadata"]:[]),...eligibility.checks.filter(check=>!check.passed).map(check=>check.label)];
  if(asset.approvedForPublicUse&&eligibility.eligible)return {state:"Published use",missing:[]};

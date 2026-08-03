@@ -5,7 +5,7 @@ import { getPublicServices, type Locale } from "@/data/site.config";
 import { spatialConfig } from "@/data/spatial.config";
 import { PublishedContentStrip } from "@/components/public-content";
 import {ServiceClaritySection} from "@/components/strategy-sections";
-import {MediaImage} from "@/components/media-image";
+import {MotionMediaRenderer} from "@/components/motion-media-renderer";
 import type {MediaAsset,MediaSlotKey} from "@/lib/media/types";
 
 const pathwayContent = {
@@ -54,7 +54,7 @@ export function SpatialConsultationHub({ locale,media={},draftPreview=false }: {
         <h1>{vi ? <>Đọc không gian<br /><em>trước khi thay đổi.</em></> : <>Read the space<br /><em>before changing it.</em></>}</h1>
         <div className="space-hero-bottom"><p>{vi ? "Hiểu cách một tài sản được định hướng, tổ chức, trải nghiệm và sử dụng—với diễn giải Phong Thủy truyền thống khi khách hàng yêu cầu." : "Understand how a property is oriented, organized, experienced, and used—with traditional Feng Shui interpretation when requested."}</p><div><Link className="space-primary-link" href={`/${locale}/book?service=spatial`}>{vi ? "Đặt lịch tư vấn không gian" : "Book a spatial consultation"}<ArrowRight /></Link><a className="space-secondary-link" href="#method">{vi ? "Khám phá phương pháp" : "Explore the method"}</a></div></div>
       </div>
-      {compassPortrait?<figure className="space-hero-portrait">{draftPreview&&<span className="development-preview-label">DRAFT MEDIA PREVIEW</span>}<MediaImage asset={compassPortrait} context="public" slot="spatial.compassPortrait" alt={compassPortrait.alt[locale]||compassPortrait.alt.en||""} fill priority sizes="(max-width: 1100px) 100vw, 36vw"/><figcaption>SPACE · {vi?"Quan sát & định hướng":"Observation & orientation"}</figcaption></figure>:<div className="space-hero-diagram" role="img" aria-label={vi ? "Sơ đồ trừu tượng về phương hướng và quan hệ không gian" : "Abstract diagram of orientation and spatial relationships"}>
+      {compassPortrait?<figure className="space-hero-portrait">{draftPreview&&<span className="development-preview-label">DRAFT MEDIA PREVIEW</span>}<MotionMediaRenderer asset={compassPortrait} context="public" slot="spatial.compassPortrait" alt={compassPortrait.alt[locale]||compassPortrait.alt.en||""} fill priority sizes="(max-width: 1100px) 100vw, 36vw"/><figcaption>SPACE · {vi?"Quan sát & định hướng":"Observation & orientation"}</figcaption></figure>:<div className="space-hero-diagram" role="img" aria-label={vi ? "Sơ đồ trừu tượng về phương hướng và quan hệ không gian" : "Abstract diagram of orientation and spatial relationships"}>
         <span className="space-coordinate">N / 00°</span><div className="space-plan" aria-hidden="true"><i /><i /><i /><i /><b>SPACE</b></div><div className="space-cardinals"><span>W</span><strong>N</strong><span>E</span><span>S</span></div>
       </div>}
       <div className="space-continuum" aria-label={publicServices.map(service=>service.lens).join(", ")}>{publicServices.map(service=>service.key==="space"?<strong key={service.key}>{service.lens}</strong>:<span key={service.key}>{service.lens}</span>)}</div>

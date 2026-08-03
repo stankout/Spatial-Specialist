@@ -1,18 +1,18 @@
 import {z} from "zod";
-import {baselineVisualSettings,resolveVisualSettings,visualConfigSchema,visualCssVariables,visualSections,type VisualConfig,type VisualPageKey,type VisualSettings} from "@/lib/visuals/config";
+import {baselineVisualSettings,resolveVisualSettings,visualConfigSchema,visualCssVariables,visualPageKeySchema,visualSections,type VisualConfig,type VisualPageKey,type VisualSettings} from "@/lib/visuals/config";
 import {resolveForegroundPalette} from "@/lib/visuals/contrast";
 
 export const visualPreviewMessageSchema=z.object({
   type:z.literal("ac-visual-preview"),
   config:visualConfigSchema,
-  page:z.enum(["homepage","deal","condition","space","videos","guides","contact","booking","footer"]),
+  page:visualPageKeySchema,
   locale:z.enum(["en","vi"]),
 }).strict();
 export type VisualPreviewMessage=z.infer<typeof visualPreviewMessageSchema>;
 
 export const visualPreviewReadyMessageSchema=z.object({
   type:z.literal("ac-visual-preview-ready"),
-  page:z.enum(["homepage","deal","condition","space","videos","guides","contact","booking","footer"]),
+  page:visualPageKeySchema,
   locale:z.enum(["en","vi"]),
 }).strict();
 
@@ -36,6 +36,22 @@ export function visualPreviewAttributes(settings:VisualSettings){
     "data-visual-frame":settings.media.frame,
     "data-visual-backdrop-enabled":String(settings.backdrop.enabled),
     "data-visual-alignment":settings.backdrop.alignment,
+    "data-visual-motion":String(settings.motion.enabled),
+    "data-visual-motion-theme":settings.motion.theme,
+    "data-visual-parallax":String(settings.motion.parallax),
+    "data-visual-pause-offscreen":String(settings.motion.pauseOffscreen),
+    "data-visual-ambient":String(settings.ambient.enabled),
+    "data-visual-network":String(settings.ambient.nodeNetwork),
+    "data-visual-grid":String(settings.grid.enabled),
+    "data-visual-grid-style":settings.grid.style,
+    "data-visual-scan":settings.grid.scan,
+    "data-visual-radar":String(settings.grid.radar),
+    "data-visual-transition":settings.transition.style,
+    "data-visual-light-pass":String(settings.transition.lightPass),
+    "data-visual-heading-motion":settings.textEffects.heading.motion,
+    "data-visual-body-motion":settings.textEffects.body.motion,
+    "data-visual-heading-reveal":settings.textEffects.heading.reveal,
+    "data-visual-body-reveal":settings.textEffects.body.reveal,
   } as const;
 }
 

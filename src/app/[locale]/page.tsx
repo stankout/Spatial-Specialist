@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {MediaImage} from "@/components/media-image";
+import {MotionMediaRenderer} from "@/components/motion-media-renderer";
 import { connection } from "next/server";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -22,7 +22,7 @@ export default async function Home({ params,searchParams }: { params: Promise<{ 
 
   return <VisualPage page="homepage" locale={locale} preview={query.visualPreview==="1"}>
     <section data-visual-section="hero" data-tone="glass" className={`hero story-surface-glass story-text-dark ${heroBackground?`has-hero-background hero-background-${heroBackground.assignment.presentation.mode}`:""}`}>
-      {heroBackground&&<div className="hero-background-media" aria-hidden="true"><MediaImage asset={heroBackground.asset} context="public" slot="homepage.heroBackground" fill priority sizes="100vw"/><span style={{opacity:heroBackground.assignment.presentation.overlayStrength}}/></div>}
+      {heroBackground&&<div className="hero-background-media" aria-hidden="true"><MotionMediaRenderer asset={heroBackground.asset} context="public" slot="homepage.heroBackground" presentation={heroBackground.assignment.presentation} fill priority sizes="100vw"/><span style={{opacity:heroBackground.assignment.presentation.overlayStrength}}/></div>}
       <div className="hero-copy">
         <div className="hero-identity">
           <p className="eyebrow">Anh Cao · Spatial Specialist LLC</p>
@@ -38,7 +38,7 @@ export default async function Home({ params,searchParams }: { params: Promise<{ 
         </div>
       </div>
       <div className="hero-visual">
-        {portrait?<div className="portrait-placeholder portrait-assigned"><MediaImage asset={portrait.asset} context="public" slot="homepage.heroPortrait" alt={localizedValue(portrait.asset.alt,locale)} fill priority sizes="(max-width: 1100px) 100vw, 32vw"/></div>:<PlaceholderPortrait label={vi ? "Thay bằng ảnh chân dung chính thức" : "Replace with approved portrait"} />}
+        {portrait?<div className="portrait-placeholder portrait-assigned"><MotionMediaRenderer asset={portrait.asset} context="public" slot="homepage.heroPortrait" presentation={portrait.assignment.presentation} alt={localizedValue(portrait.asset.alt,locale)} fill priority sizes="(max-width: 1100px) 100vw, 32vw"/></div>:<PlaceholderPortrait label={vi ? "Thay bằng ảnh chân dung chính thức" : "Replace with approved portrait"} />}
         <div className="visual-note"><span>{vi ? "DỊCH VỤ ĐANG MỞ" : "ACTIVE SERVICES"}</span><p>{vi ? "Giao dịch · Không gian" : "Deal · Space"}</p></div>
       </div>
       <a href="#services" className="scroll-cue" aria-label="Scroll to services"><ArrowDown /></a>

@@ -6,7 +6,7 @@ Set `STUDIO_ENABLED=true` and `MEDIA_STORAGE_PROVIDER=local`, run `npm run dev`,
 
 Uploaded image binaries are stored in `public/uploads/`. Local metadata and slot assignments are stored in `.dev-data/media-library.json` and `.dev-data/media-assignments.json`. Both `public/uploads/` and `.dev-data/` are excluded from Git and can be inspected directly in VS Code.
 
-The local provider accepts validated JPEG, PNG, WebP, and AVIF files up to 10 MB. File signatures, declared MIME type, extension, and practical dimensions are checked server-side. Local storage is a development convenience and is not a production media architecture.
+The local provider accepts validated JPEG, PNG, WebP, AVIF, MP4, WebM, and MOV sources within the configured upload limit. File signatures, declared MIME type, extension, and practical metadata are checked server-side. Local storage is a development convenience and is not a production media architecture. See `MOTION_MEDIA_SYSTEM.md` for video readiness, semantic roles, procedural scenes, and optional FFmpeg tooling.
 
 ## Assigning the homepage portrait
 
@@ -14,12 +14,12 @@ The local provider accepts validated JPEG, PNG, WebP, and AVIF files up to 10 MB
 2. Select the image in Media Library and add approved English/Vietnamese alt text.
 3. Open Page Assets → Homepage.
 4. Assign the image to `homepage.heroPortrait`.
-5. Refresh `/en` or `/vi`. The image uses responsive sizing, `object-fit: cover`, and its saved focal position.
+5. Refresh `/en` or `/vi`. The image uses responsive sizing and its saved focal position. Controlled `cover` is allowed because this is an explicit portrait slot; non-portrait source previews remain proportional.
 6. Choose Remove to restore the existing branded placeholder.
 
 ## Assigning a homepage background
 
-Assign an image to `homepage.heroBackground`, then choose Cover, Contained Editorial Panel, Background with Overlay, or Subtle Texture. Overlay strength is stored with the assignment. Removing the assignment restores the approved image-free homepage composition.
+Assign a compatible image, video, or procedural scene to `homepage.heroBackground`, then choose its presentation contract. Studio source previews remain uncropped. Public crop/playback/treatment behavior follows the slot contract and Draft/Published assignment. Removing the assignment restores the approved image-free homepage composition.
 
 ## Replacing images and metadata
 

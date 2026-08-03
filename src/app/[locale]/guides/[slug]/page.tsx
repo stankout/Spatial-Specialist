@@ -1,3 +1,3 @@
-import {notFound} from "next/navigation";import {PublicContentDetail} from "@/components/public-content";import {contentMetadata} from "@/lib/content-studio/seo";import {isLocale} from "@/lib/i18n";
+import {notFound} from "next/navigation";import {PublicContentDetail} from "@/components/public-content";import {VisualPage} from "@/components/visual-page";import {contentMetadata} from "@/lib/content-studio/seo";import {isLocale} from "@/lib/i18n";
 export async function generateMetadata({params}:{params:Promise<{locale:string;slug:string}>}){const {locale,slug}=await params;return contentMetadata(locale==="vi"?"vi":"en",slug,["guide"])}
-export default async function Page({params}:{params:Promise<{locale:string;slug:string}>}){const {locale,slug}=await params;if(!isLocale(locale))notFound();return <PublicContentDetail locale={locale} slug={slug} allowedTypes={["guide"]}/>}
+export default async function Page({params}:{params:Promise<{locale:string;slug:string}>}){const {locale,slug}=await params;if(!isLocale(locale))notFound();return <VisualPage page="guides" locale={locale}><PublicContentDetail locale={locale} slug={slug} allowedTypes={["guide"]}/></VisualPage>}

@@ -1,0 +1,74 @@
+/* AC Living Visual Engine 3.0: one semantic motion layer, controlled by Visual Director. */
+.visual-page-scope{
+  position:relative;
+  isolation:isolate;
+  display:block;
+  overflow:clip;
+}
+.visual-page-scope>:not(.living-visual-environment):not(style){position:relative;z-index:1}
+.living-visual-environment{position:absolute;z-index:0;inset:0;overflow:hidden;pointer-events:none;contain:strict}
+.living-ambient,.living-grid,.living-network,.living-radar,.living-scan,.living-noise{position:absolute;inset:0}
+.living-ambient{inset:-10vw;opacity:calc(var(--visual-motion-intensity,.28)*var(--visual-ambient-glow,.16));filter:blur(var(--visual-ambient-depth,16px)) brightness(var(--visual-living-brightness,54%));will-change:transform}
+.living-ambient-a{background:radial-gradient(circle at 18% 12%,color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 72%,transparent) 0,transparent var(--visual-ambient-spread,24vw));animation:living-drift-a var(--visual-ambient-duration,58s) ease-in-out infinite alternate}
+.living-ambient-b{background:radial-gradient(circle at 82% 54%,color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 48%,transparent) 0,transparent calc(var(--visual-ambient-spread,24vw)*1.2));animation:living-drift-b calc(var(--visual-ambient-duration,58s)*1.18) ease-in-out infinite alternate-reverse}
+.living-grid{inset:-4%;opacity:var(--visual-grid-opacity,.09);background-image:linear-gradient(rgb(63 111 92/.2) 1px,transparent 1px),linear-gradient(90deg,rgb(63 111 92/.2) 1px,transparent 1px);background-size:var(--visual-grid-density,64px) var(--visual-grid-density,64px);mask-image:linear-gradient(to bottom,black,transparent 92%);animation:living-grid-drift calc(var(--visual-ambient-duration,58s)*1.4) linear infinite;will-change:transform}
+[data-visual-grid-style="market"] .living-grid{background-image:linear-gradient(rgb(183 153 100/.22) 1px,transparent 1px),linear-gradient(90deg,rgb(183 153 100/.22) 1px,transparent 1px);background-size:calc(var(--visual-grid-density,64px)*1.6) calc(var(--visual-grid-density,64px)*.55)}
+[data-visual-grid-style="spatial"] .living-grid{background-image:linear-gradient(rgb(98 194 159/.22) 1px,transparent 1px),linear-gradient(90deg,rgb(98 194 159/.22) 1px,transparent 1px),linear-gradient(45deg,transparent 49.7%,rgb(98 194 159/.12) 50%,transparent 50.3%);background-size:var(--visual-grid-density,64px) var(--visual-grid-density,64px),var(--visual-grid-density,64px) var(--visual-grid-density,64px),calc(var(--visual-grid-density,64px)*2) calc(var(--visual-grid-density,64px)*2)}
+[data-visual-grid-style="editorial"] .living-grid{background-image:linear-gradient(90deg,rgb(8 19 16/.13) 1px,transparent 1px);background-size:calc(var(--visual-grid-density,64px)*2.4) 100%}
+[data-visual-grid-style="hud"] .living-grid{background-image:linear-gradient(rgb(84 127 109/.15) 1px,transparent 1px),linear-gradient(90deg,rgb(84 127 109/.15) 1px,transparent 1px);mask-image:linear-gradient(90deg,transparent,black 16%,black 84%,transparent)}
+.living-network{opacity:var(--visual-node-opacity,.09)}
+.living-network-node{position:absolute;width:4px;height:4px;border:1px solid var(--visual-living-accent-color,#91d6bb);border-radius:50%;box-shadow:0 0 12px color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 70%,transparent);animation:living-node 9s ease-in-out var(--node-delay,0s) infinite}
+.living-network-line{position:absolute;width:clamp(100px,16vw,280px);height:1px;transform:rotate(var(--network-rotate));transform-origin:left;background:linear-gradient(90deg,var(--visual-living-accent-color,#91d6bb),transparent);opacity:calc(var(--visual-line-sweep,.1)*.8)}
+.living-radar{left:auto;top:8%;right:-9vw;width:min(34vw,520px);height:min(34vw,520px);opacity:calc(var(--visual-grid-opacity,.09)*1.2)}
+.living-radar i{position:absolute;inset:var(--radar-inset,12%);border:1px solid var(--visual-living-accent-color,#91d6bb);border-radius:50%}
+.living-radar i:nth-child(2){--radar-inset:30%}.living-radar i:nth-child(3){--radar-inset:46%}
+.living-radar::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 82%,color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 24%,transparent) 96%,transparent);animation:living-radar 28s linear infinite}
+.living-scan{opacity:calc(var(--visual-line-sweep,.1)*var(--visual-motion-intensity,.28));background:linear-gradient(to bottom,transparent 0 46%,color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 56%,transparent) 50%,transparent 54%);background-size:100% 18vh;animation:living-scan-y var(--visual-scan-duration,16s) linear infinite}
+[data-visual-scan="vertical"] .living-scan{background:linear-gradient(to right,transparent 0 46%,color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) 50%,transparent) 50%,transparent 54%);background-size:18vw 100%;animation-name:living-scan-x}
+.living-noise{opacity:var(--visual-ambient-noise,.02);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E")}
+[data-visual-network="false"] .living-network,[data-visual-ambient="false"] :is(.living-ambient,.living-network),[data-visual-grid="false"] .living-grid,[data-visual-radar="false"] .living-radar,[data-visual-scan="none"] .living-scan,[data-visual-motion="false"] .living-visual-environment{display:none}
+
+/* Surface response is applied only to existing authored surfaces and cards. */
+.visual-page-scope :is([data-tone="glass"],.service-pillar,.deal-pathway,.space-pathway-card,.published-content-grid>a,.search-results>a){transition:transform calc(.32s + var(--visual-surface-response,.32)*.24s) ease,border-color .28s ease,box-shadow .32s ease}
+@media (hover:hover){.visual-page-scope :is([data-tone="glass"],.service-pillar,.deal-pathway,.space-pathway-card,.published-content-grid>a,.search-results>a):hover{transform:translate3d(0,calc(var(--visual-hover-lift,3px)*-1),0);border-color:color-mix(in srgb,var(--visual-living-accent-color,#91d6bb) calc(24% + var(--visual-edge-glow,.08)*35%),transparent);box-shadow:0 calc(14px + var(--visual-surface-depth,.36)*18px) calc(32px + var(--visual-surface-depth,.36)*36px) rgb(5 18 14/calc(.06 + var(--visual-surface-depth,.36)*.12))}}
+.visual-page-scope[data-visual-light-pass="true"] :is(.button,.quiet-link,.deal-pathway,.space-pathway-card){position:relative;overflow:hidden}
+.visual-page-scope[data-visual-light-pass="true"] :is(.button,.quiet-link,.deal-pathway,.space-pathway-card)::after{content:"";position:absolute;inset:-100% -45%;background:linear-gradient(110deg,transparent 42%,rgb(255 255 255/calc(.04 + var(--visual-hover-energy,.2)*.12)) 49%,transparent 56%);transform:translate3d(-54%,0,0);transition:transform .82s ease;pointer-events:none}
+@media (hover:hover){.visual-page-scope[data-visual-light-pass="true"] :is(.button,.quiet-link,.deal-pathway,.space-pathway-card):hover::after{transform:translate3d(54%,0,0)}}
+
+/* Text motion never changes content or contrast; it only moves the configured paint layer. */
+.visual-page-scope :is(h1,h2,h3){background-size:220% 220%;animation-name:var(--visual-heading-motion-name,none);animation-duration:var(--visual-heading-motion-speed,18s);animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate}
+.visual-page-scope[data-visual-heading-motion="signal-flicker"] :is(h1,h2,h3){animation-timing-function:steps(1,end)}
+.visual-page-scope :is(p,li,dd){background-size:220% 220%;animation-name:var(--visual-body-motion-name,none);animation-duration:var(--visual-body-motion-speed,18s);animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate}
+
+/* View-timeline transitions are progressive enhancement; unsupported browsers remain fully visible. */
+@supports (animation-timeline:view()){
+  .visual-page-scope [data-visual-section]{animation-name:var(--visual-transition-name,none);animation-duration:var(--visual-transition-duration,.72s);animation-timing-function:ease;animation-fill-mode:both;animation-timeline:view();animation-range:entry 4% cover 24%}
+  .visual-page-scope[data-visual-heading-motion="none"][data-visual-heading-reveal="rise"] :is(h1,h2){animation:living-section-in var(--visual-transition-duration,.72s) ease both;animation-timeline:view();animation-range:entry 0 cover 18%}
+  .visual-page-scope[data-visual-heading-motion="none"][data-visual-heading-reveal="fade"] :is(h1,h2){animation:living-heading-fade var(--visual-transition-duration,.72s) ease both;animation-timeline:view();animation-range:entry 0 cover 16%}
+  .visual-page-scope[data-visual-heading-motion="none"][data-visual-heading-reveal="focus"] :is(h1,h2){animation:living-heading-focus var(--visual-transition-duration,.72s) ease both;animation-timeline:view();animation-range:entry 0 cover 20%}
+}
+@supports (animation-timeline:scroll()){
+  .visual-page-scope[data-visual-parallax="true"] .living-network{animation:living-parallax linear both;animation-timeline:scroll(root block)}
+}
+
+@keyframes living-drift-a{to{transform:translate3d(7vw,5vh,0) scale(1.08)}}
+@keyframes living-drift-b{to{transform:translate3d(-6vw,-4vh,0) scale(.94)}}
+@keyframes living-grid-drift{to{transform:translate3d(var(--visual-grid-drift,3px),var(--visual-grid-drift,3px),0)}}
+@keyframes living-node{0%,100%{opacity:calc(.2 + var(--visual-node-flicker,.04));transform:scale(.8)}48%{opacity:calc(.72 + var(--visual-node-flicker,.04));transform:scale(1.25)}52%{opacity:.42}}
+@keyframes living-radar{to{transform:rotate(1turn)}}
+@keyframes living-scan-y{to{background-position:0 100vh}}
+@keyframes living-scan-x{to{background-position:100vw 0}}
+@keyframes living-gradient{to{background-position:100% 50%}}
+@keyframes living-light-sweep{0%,72%,100%{background-position:0 50%}88%{background-position:100% 50%}}
+@keyframes living-text-pulse{0%,100%{filter:none}50%{filter:brightness(1.08)}}
+@keyframes living-signal{0%,92%,100%{opacity:1}93%{opacity:.86}94%{opacity:1}96%{opacity:.92}}
+@keyframes living-section-in{from{opacity:.72;transform:translate3d(0,var(--visual-transition-distance,14px),0)}to{opacity:1;transform:none}}
+@keyframes living-section-scan{from{opacity:.76;clip-path:inset(0 8% 0 0);transform:translate3d(0,calc(var(--visual-transition-distance,14px)*.5),0)}to{opacity:1;clip-path:inset(0);transform:none}}
+@keyframes living-section-spatial{from{opacity:.74;transform:translate3d(calc(var(--visual-transition-distance,14px)*-.5),var(--visual-transition-distance,14px),0)}to{opacity:1;transform:none}}
+@keyframes living-heading-fade{from{opacity:.35}to{opacity:1}}
+@keyframes living-heading-focus{from{opacity:.45;filter:blur(5px)}to{opacity:1;filter:blur(0)}}
+@keyframes living-parallax{from{transform:translate3d(0,calc(var(--visual-parallax-strength,7px)*-1),0)}to{transform:translate3d(0,var(--visual-parallax-strength,7px),0)}}
+
+@media (max-width:700px){.living-radar{right:-28vw;width:72vw;height:72vw}.living-network-line:nth-child(n+5),.living-network-node:nth-child(n+14){display:none}.living-ambient{inset:-18vw}.visual-page-scope{--visual-hover-lift:0px}}
+@media (prefers-reduced-motion:reduce){.living-visual-environment *,.living-visual-environment,.visual-page-scope :is(h1,h2,h3),.visual-page-scope [data-visual-section]{animation:none!important;transition-duration:.01ms!important;transform:none!important}.living-scan{display:none!important}.visual-page-scope :is(.button,.quiet-link,.deal-pathway,.space-pathway-card)::after{display:none!important}}
+@media print{.living-visual-environment{display:none!important}}

@@ -1,0 +1,5 @@
+import {mediaAssetSchema,type MediaAsset} from "@/lib/media/types";
+import {proceduralScenes} from "@/lib/media/procedural-scenes";
+
+const createdAt="2026-07-30T00:00:00.000Z";
+export function getProceduralSceneAssets():MediaAsset[]{return proceduralScenes.map(scene=>mediaAssetSchema.parse({id:`procedural:${scene.id}`,filename:`${scene.id}.ac-scene`,originalFilename:`${scene.label} · AC original procedural scene`,sourceFilename:"AC procedural registry",url:`ac-scene://${scene.id}`,provider:"procedural",mimeType:"application/x-ac-scene+json",sourceType:"procedural-scene",sceneId:scene.id,width:1920,height:1080,duration:null,fileSize:0,title:{en:scene.label,vi:scene.label},description:{en:scene.description,vi:""},alt:{en:"",vi:""},caption:{en:"",vi:""},focalPoint:{x:.5,y:.5},cropMode:"contain",mediaRole:scene.role,serviceLens:scene.serviceLens,decorative:true,tags:["Procedural","AC Original",scene.serviceLens.toUpperCase(),scene.role],reviewStatus:"review",possiblePrivateInformation:false,privacyReviewed:true,rightsStatus:"owner-created",approvedForPublicUse:false,imported:true,createdAt,updatedAt:createdAt}))}
